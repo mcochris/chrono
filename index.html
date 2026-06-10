@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/src/assets/puffy.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chrono</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <script type="module" src="/src/main.ts"></script>
+</head>
+
+<body>
+    <div class="page-header"> Analog Clock </div>
+    <div class="clocks-container">
+        <div class="clock-section local-time">
+            <div class="clock-label">Local Time</div>
+            <div class="clock">
+                <div class="hour"></div>
+                <div class="min"></div>
+                <div class="sec"></div>
+            </div>
+        </div>
+
+        <div class="clock-section utc-time">
+            <div class="clock-label">UTC Time</div>
+            <div class="clock">
+                <div class="hour"></div>
+                <div class="min"></div>
+                <div class="sec"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="switch-cont">
+        <button class="switch-btn"> Light </button>
+    </div>
+</body>
+
+</html>
