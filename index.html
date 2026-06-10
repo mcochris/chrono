@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/src/assets/puffy.png" />
+    <link rel="icon" type="image/png" href="/src/assets/puffy.png?v=2" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>chrono</title>
     <link rel="stylesheet" href="/src/style.css">
@@ -11,10 +11,10 @@
 </head>
 
 <body>
-    <div class="page-header"> Analog Clock </div>
+    <div class="page-header">Chrono</div>
     <div class="clocks-container">
         <div class="clock-section local-time">
-            <div class="clock-label">Local Time</div>
+            <div class="clock-label">Local</div>
             <div class="clock">
                 <div class="hour"></div>
                 <div class="min"></div>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="clock-section utc-time">
-            <div class="clock-label">UTC Time</div>
+            <button class="clock-label calc-time">UTC</button>
             <div class="clock">
                 <div class="hour"></div>
                 <div class="min"></div>
@@ -32,9 +32,14 @@
         </div>
     </div>
 
-    <div class="switch-cont">
-        <button class="switch-btn"> Light </button>
+    <div class="tz-picker">
+        <div class="tz-picker-header">Select Timezone by:</div>
+        <div class="tz-picker-body">
+            <input type="text" class="tz-search" placeholder="Search timezone..." />
+            <div class="tz-list"></div>
+        </div>
     </div>
+
 </body>
 
 </html>
