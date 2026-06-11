@@ -1,10 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/src/assets/puffy.png?v=2" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/src/assets/puffy.png?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chrono</title>
     <link rel="stylesheet" href="/src/style.css">
     <script type="module" src="/src/main.ts"></script>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="clock-section utc-time">
-            <button class="clock-label calc-time">UTC</button>
+            <button type="button" class="clock-label calc-time">UTC</button>
             <div class="clock">
                 <div class="hour"></div>
                 <div class="min"></div>
@@ -34,10 +34,20 @@
 
     <div class="tz-picker">
         <div class="tz-picker-header">Select Timezone by:</div>
-        <div class="tz-picker-body">
-            <input type="text" class="tz-search" placeholder="Search timezone..." />
-            <div class="tz-list"></div>
+        <div class="tz-regions">
+            <button type="button" data-region="Africa">Africa</button>
+            <button type="button" data-region="America">America</button>
+            <button type="button" data-region="Antarctica">Antarctica</button>
+            <button type="button" data-region="Arctic">Arctic</button>
+            <button type="button" data-region="Asia">Asia</button>
+            <button type="button" data-region="Atlantic">Atlantic</button>
+            <button type="button" data-region="Australia">Australia</button>
+            <button type="button" data-region="UTC">UTC/GMT</button>
+            <button type="button" data-region="Europe">Europe</button>
+            <button type="button" data-region="Indian">Indian</button>
+            <button type="button" data-region="Pacific">Pacific</button>
         </div>
+        <div class="country-list"></div>
     </div>
 
 </body>

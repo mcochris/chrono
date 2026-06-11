@@ -168,3 +168,8 @@ body {
     cursor: pointer;
     transition: all ease 0.3s;
 }
+
+.active-button {
+    background-color: var(--main-text-color);
+    color: var(--main-bg-color);
+}

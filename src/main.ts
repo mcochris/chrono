@@ -2,6 +2,9 @@
 // Just noticed accessing localStorage is banned from codepen, so disabling saving theme to localStorage
 import Swal from 'sweetalert2'
 import { DateTime } from 'luxon';
+import tzCountries from './assets/tz-countries.json';
+
+type TzRegion = keyof typeof tzCountries;
 
 const deg = 6;
 const localHour = document.querySelector(".local-time .hour") as HTMLDivElement;
@@ -11,15 +14,8 @@ const utcHour = document.querySelector(".utc-time .hour") as HTMLDivElement;
 const utcMin = document.querySelector(".utc-time .min") as HTMLDivElement;
 const utcSec = document.querySelector(".utc-time .sec") as HTMLDivElement;
 const TZselector = document.querySelector(".clock-label.calc-time") as HTMLDivElement;
-
-TZselector.addEventListener("click", () => {
-    Swal.fire({
-        title: 'Error!',
-        text: 'Do you want to continue',
-        icon: 'error',
-        confirmButtonText: 'Cool'
-    })
-});
+const TZRegionButtons = document.querySelectorAll(".tz-regions button") as NodeListOf<HTMLButtonElement>;
+const countryList = document.querySelector(".country-list") as HTMLDivElement;
 
 const setClock = () => {
     const now = DateTime.now();
@@ -44,28 +40,56 @@ setClock();
 // Update every 1000 ms
 setInterval(setClock, 1000);
 
-// const switchTheme = (evt: MouseEvent) => {
-// 	const switchBtn = evt.currentTarget as HTMLButtonElement;
-// 	if (switchBtn.textContent.toLowerCase() === "light") {
-// 		switchBtn.textContent = "dark";
-// 		// localStorage.setItem("theme", "dark");
-// 		document.documentElement.setAttribute("data-theme", "dark");
-// 	} else {
-// 		switchBtn.textContent = "light";
-// 		// localStorage.setItem("theme", "light"); //add this
-// 		document.documentElement.setAttribute("data-theme", "light");
-// 	}
-// };
+//=============================================================================
+// Add click event listener to the timezone selector
+//=============================================================================
+TZselector.addEventListener("click", () => {
+    Swal.fire({
+        title: 'Error!',
+        text: 'Do you want to continue',
+        icon: 'error',
+        confirmButtonText: 'Cool'
+    })
+});
 
-// const switchModeBtn = document.querySelector(".switch-btn") as HTMLButtonElement;
-// switchModeBtn.addEventListener("click", switchTheme, false);
+//=============================================================================
+// Add click event listeners to the region buttons
+//=============================================================================
+TZRegionButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        TZRegionButtons.forEach(btn => btn.classList.remove("active-button"));
+        button.classList.add("active-button");
+        const region = button.getAttribute("data-region");
+        if (region) {
+            if (region === "UTC") {
+                countryList.innerHTML = "";
+                return; // Skip the "UTC" region as it not a country
+            }
+            const countries = getCountriesByRegion(region);
+            countryList.innerHTML = "";
+            countries.forEach(country => {
+                countryList.innerHTML += `<button type="button" data-country="${country}">${country}</button>`;
+            });
+        }
+    });
+});
 
-// let currentTheme = "dark";
-// // currentTheme = localStorage.getItem("theme")
-// // 	? localStorage.getItem("theme")
-// // 	: null;
+countryList.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === "BUTTON") {
+        const country = target.getAttribute("data-country");
+        if (country) {
+            console.log(`Selected country: ${country}`);
+        }
+    }
+});
 
-// if (currentTheme) {
-// 	document.documentElement.setAttribute("data-theme", currentTheme);
-// 	switchModeBtn.textContent = currentTheme;
-// }
+//=============================================================================
+// Returns a sorted, unique list of country names whose timezones belong to the given IANA region.
+//=============================================================================
+function getCountriesByRegion(region: string): string[] {
+    const key = region as TzRegion;
+    return Object.prototype.hasOwnProperty.call(tzCountries, key)
+        ? [...tzCountries[key]].sort()
+        : [];
+}
