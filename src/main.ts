@@ -1,8 +1,9 @@
-// This code is adapted from https://codepen.io/imvpn22/pen/RwPvOgQ
-// Just noticed accessing localStorage is banned from codepen, so disabling saving theme to localStorage
+// This code is partially adapted from https://codepen.io/imvpn22/pen/RwPvOgQ
+
 import Swal from 'sweetalert2'
 import { DateTime } from 'luxon';
 import tzCountries from './assets/tz-countries.json';
+import tzCities from './assets/tz-cities.json';
 
 type TzRegion = keyof typeof tzCountries;
 
@@ -16,6 +17,13 @@ const utcSec = document.querySelector(".utc-time .sec") as HTMLDivElement;
 const TZselector = document.querySelector(".clock-label.calc-time") as HTMLDivElement;
 const TZRegionButtons = document.querySelectorAll(".tz-regions button") as NodeListOf<HTMLButtonElement>;
 const countryList = document.querySelector(".country-list") as HTMLDivElement;
+const cityList = document.querySelector(".city-list") as HTMLDivElement;
+const tzList = document.querySelector(".tz-list") as HTMLDivElement;
+
+const now = DateTime.now();
+console.log("Local time:", now.toFormat("ZZZZ"));
+var rezoned = now.setZone("Europe/Paris");
+console.log("Re-zoned time:", rezoned.toFormat("ZZZZ"));
 
 const setClock = () => {
     const now = DateTime.now();
@@ -63,7 +71,7 @@ TZRegionButtons.forEach(button => {
         if (region) {
             if (region === "UTC") {
                 countryList.innerHTML = "";
-                return; // Skip the "UTC" region as it not a country
+                return; // Skip the "UTC" region - not a country
             }
             const countries = getCountriesByRegion(region);
             countryList.innerHTML = "";
@@ -74,18 +82,82 @@ TZRegionButtons.forEach(button => {
     });
 });
 
+//=============================================================================
+// Add click event listener to the country list
+//=============================================================================
 countryList.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     if (target.tagName === "BUTTON") {
         const country = target.getAttribute("data-country");
+        countryList.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+        target.classList.add("active-button");
         if (country) {
-            console.log(`Selected country: ${country}`);
+            const cities = getCitiesByCountry(country);
+            if(cities.length > 0) {
+                cityList.innerHTML = "";
+                cities.forEach(city => {
+                    cityList.innerHTML += `<button type="button" data-city="${city}">${city}</button>`;
+                });
+            }
         }
     }
 });
 
 //=============================================================================
-// Returns a sorted, unique list of country names whose timezones belong to the given IANA region.
+// Add click event listener to the city list
+//=============================================================================
+cityList.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === "BUTTON") {
+        const city = target.getAttribute("data-city");
+        cityList.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+        target.classList.add("active-button");
+        if (city) {
+            const timezones = getTimezonesByCity(city);
+            tzList.innerHTML = "";
+            timezones.forEach(tz => {
+                tzList.innerHTML += `<button type="button" data-tz="${tz}">${tz}</button>`;
+            });
+        }
+    }
+});
+
+//=============================================================================
+// Add click event listener to the timezone list
+//=============================================================================
+tzList.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === "BUTTON") {
+        const tz = target.getAttribute("data-tz");
+        tzList.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+        target.classList.add("active-button");
+        if (tz) {
+            console.log(tz);
+        }
+    }
+});
+
+//=============================================================================
+// Returns a sorted, unique list of city names in the given IANA country.
+//=============================================================================
+function getCitiesByCountry(country: string): string[] {
+    return Object.prototype.hasOwnProperty.call(tzCities, country)
+        ? (tzCities as Record<string, string[]>)[country]
+        : [];
+}
+
+//=============================================================================
+// Returns IANA timezone identifiers whose city component matches the given name.
+//=============================================================================
+function getTimezonesByCity(city: string): string[] {
+    const cityKey = city.replace(/ /g, '_');
+    return (Intl as unknown as { supportedValuesOf(key: string): string[] })
+        .supportedValuesOf('timeZone')
+        .filter(tz => tz.split('/').pop() === cityKey);
+}
+
+//=============================================================================
+// Returns a sorted, unique list of countries in the given IANA region.
 //=============================================================================
 function getCountriesByRegion(region: string): string[] {
     const key = region as TzRegion;
