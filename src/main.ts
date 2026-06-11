@@ -72,6 +72,7 @@ TZRegionButtons.forEach(button => {
             if (region === "UTC") {
                 countryList.innerHTML = "";
                 selectedTZ = "UTC";
+                TZselector.textContent = "UTC";
                 return; // Skip the "UTC" region - not a country
             }
             const countries = getCountriesByRegion(region);
@@ -134,6 +135,7 @@ tzList.addEventListener("click", (event) => {
         target.classList.add("active-button");
         if (tz) {
             selectedTZ = tz;
+            TZselector.textContent = tz + " (" + DateTime.now().setZone(tz).toFormat("ZZZZ") + ")";
         }
     }
 });
