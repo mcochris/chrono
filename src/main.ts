@@ -19,14 +19,11 @@ const TZRegionButtons = document.querySelectorAll(".tz-regions button") as NodeL
 const countryList = document.querySelector(".country-list") as HTMLDivElement;
 const cityList = document.querySelector(".city-list") as HTMLDivElement;
 const tzList = document.querySelector(".tz-list") as HTMLDivElement;
-
-const now = DateTime.now();
-console.log("Local time:", now.toFormat("ZZZZ"));
-var rezoned = now.setZone("Europe/Paris");
-console.log("Re-zoned time:", rezoned.toFormat("ZZZZ"));
+var selectedTZ: string | null = "UTC";
 
 const setClock = () => {
     const now = DateTime.now();
+    const rezoned = now.setZone(selectedTZ || "UTC");
 
     const lhh = now.hour * 30;
     const lmm = now.minute * deg;
@@ -35,9 +32,12 @@ const setClock = () => {
     localMin.style.transform = `rotateZ(${lmm}deg)`;
     localSec.style.transform = `rotateZ(${lss}deg)`;
 
-    const uhh = now.toUTC().hour * 30;
-    const umm = now.toUTC().minute * deg;
-    const uss = now.toUTC().second * deg;
+    // const uhh = now.toUTC().hour * 30;
+    // const umm = now.toUTC().minute * deg;
+    // const uss = now.toUTC().second * deg;
+    const uhh = rezoned.hour * 30;
+    const umm = rezoned.minute * deg;
+    const uss = rezoned.second * deg;
     utcHour.style.transform = `rotateZ(${uhh + umm / 12}deg)`;
     utcMin.style.transform = `rotateZ(${umm}deg)`;
     utcSec.style.transform = `rotateZ(${uss}deg)`;
@@ -71,6 +71,7 @@ TZRegionButtons.forEach(button => {
         if (region) {
             if (region === "UTC") {
                 countryList.innerHTML = "";
+                selectedTZ = "UTC";
                 return; // Skip the "UTC" region - not a country
             }
             const countries = getCountriesByRegion(region);
@@ -132,7 +133,7 @@ tzList.addEventListener("click", (event) => {
         tzList.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
         target.classList.add("active-button");
         if (tz) {
-            console.log(tz);
+            selectedTZ = tz;
         }
     }
 });
