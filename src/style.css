@@ -1,7 +1,7 @@
 /* This code is adapted from https://codepen.io/imvpn22/pen/RwPvOgQ */
 
 :root {
-    --main-bg-color: #fff;
+    --main-bg-color: whitesmoke;
     --main-text-color: #888888;
 }
 
@@ -12,7 +12,9 @@
 
 * {
     box-sizing: border-box;
-    /* 		transition: all ease 0.2s; */
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 4px;
 }
 
 body {
@@ -32,9 +34,9 @@ body {
     font-size: 2rem;
     color: var(--main-text-color);
     padding: 2rem 0;
-    font-family: monospace;
+    /* font-family: monospace;
     text-transform: uppercase;
-    letter-spacing: 4px;
+    letter-spacing: 4px; */
     transition: all ease 0.2s;
 }
 
@@ -45,7 +47,8 @@ body {
     justify-content: center;
     align-items: center;
     background-color: var(--main-bg-color);
-    background-image: url("https://imvpn22.github.io/analog-clock/clock.png");
+    /* background-image: url("https://imvpn22.github.io/analog-clock/clock.png"); */
+    background-image: url("/src/assets/clock.png");
     background-position: center center;
     background-size: cover;
     border-radius: 50%;
@@ -168,6 +171,41 @@ body {
     cursor: pointer;
     transition: all ease 0.3s;
 }
+
+.tz-picker{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--main-text-color);
+    border-radius: 8px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.tz-regions, .country-list, .city-list, .tz-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+/* .tz-regions button {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--main-text-color);
+    background-color: transparent;
+    color: var(--main-text-color);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all ease 0.2s;
+} */
 
 .active-button {
     background-color: var(--main-text-color);
