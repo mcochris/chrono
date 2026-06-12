@@ -33,25 +33,37 @@
     </div>
 
     <div class="tz-picker">
-        <div class="tz-picker-header">Select Timezone region:</div>
-        <div class="tz-regions">
-            <button type="button" data-region="Africa">Africa</button>
-            <button type="button" data-region="America">America</button>
-            <button type="button" data-region="Antarctica">Antarctica</button>
-            <button type="button" data-region="Arctic">Arctic</button>
-            <button type="button" data-region="Asia">Asia</button>
-            <button type="button" data-region="Atlantic">Atlantic</button>
-            <button type="button" data-region="Australia">Australia</button>
-            <button type="button" data-region="UTC">UTC/GMT</button>
-            <button type="button" data-region="Europe">Europe</button>
-            <button type="button" data-region="Indian">Indian</button>
-            <button type="button" data-region="Pacific">Pacific</button>
+        <div class="region-list">
+            <div class="region-list-header">Select region:</div>
+            <div class="region-list-buttons">
+                <button type="button" data-region="Africa">Africa</button>
+                <button type="button" data-region="America">America</button>
+                <button type="button" data-region="Antarctica">Antarctica</button>
+                <button type="button" data-region="Arctic">Arctic</button>
+                <button type="button" data-region="Asia">Asia</button>
+                <button type="button" data-region="Atlantic">Atlantic</button>
+                <button type="button" data-region="Australia">Australia</button>
+                <button type="button" data-region="UTC">UTC/GMT</button>
+                <button type="button" data-region="Europe">Europe</button>
+                <button type="button" data-region="Indian">Indian</button>
+                <button type="button" data-region="Pacific">Pacific</button>
+            </div>
         </div>
+
         <div class="country-list">
-            <div class="country-list-header">Select Timezone country:</div>
+            <div class="country-list-header">Select country:</div>
+            <div class="country-list-buttons"></div>
         </div>
-        <div class="city-list"></div>
-        <div class="tz-list"></div>
+
+        <div class="city-list">
+            <div class="city-list-header">Select city:</div>
+            <div class="city-list-buttons"></div>
+        </div>
+
+        <div class="tz-list">
+            <div class="tz-list-header">Select timezone:</div>
+            <div class="tz-list-buttons"></div>
+        </div>
     </div>
 
 </body>

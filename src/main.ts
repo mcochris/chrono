@@ -15,11 +15,21 @@ const utcHour = document.querySelector(".secondary-clock .hour") as HTMLDivEleme
 const utcMin = document.querySelector(".secondary-clock .min") as HTMLDivElement;
 const utcSec = document.querySelector(".secondary-clock .sec") as HTMLDivElement;
 const TZselector = document.querySelector(".clock-label.secondary-time") as HTMLDivElement;
-const TZRegionButtons = document.querySelectorAll(".tz-regions button") as NodeListOf<HTMLButtonElement>;
+const TZRegionButtons = document.querySelectorAll(".region-list-buttons button") as NodeListOf<HTMLButtonElement>;
 const countryList = document.querySelector(".country-list") as HTMLDivElement;
+const countryListButtons = countryList.querySelector(".country-list-buttons") as HTMLDivElement;
 const cityList = document.querySelector(".city-list") as HTMLDivElement;
+const cityListButtons = cityList.querySelector(".city-list-buttons") as HTMLDivElement;
 const tzList = document.querySelector(".tz-list") as HTMLDivElement;
+const tzListButtons = tzList.querySelector(".tz-list-buttons") as HTMLDivElement;
 var selectedTZ: string | null = "UTC";
+
+countryListButtons.innerHTML = "";
+cityListButtons.innerHTML = "";
+tzListButtons.innerHTML = "";
+countryList.style.display = "none";
+cityList.style.display = "none";
+tzList.style.display = "none";
 
 const setClock = () => {
     const now = DateTime.now();
@@ -32,9 +42,6 @@ const setClock = () => {
     localMin.style.transform = `rotateZ(${lmm}deg)`;
     localSec.style.transform = `rotateZ(${lss}deg)`;
 
-    // const uhh = now.toUTC().hour * 30;
-    // const umm = now.toUTC().minute * deg;
-    // const uss = now.toUTC().second * deg;
     const uhh = rezoned.hour * 30;
     const umm = rezoned.minute * deg;
     const uss = rezoned.second * deg;
@@ -43,9 +50,7 @@ const setClock = () => {
     utcSec.style.transform = `rotateZ(${uss}deg)`;
 };
 
-// first time
 setClock();
-// Update every 1000 ms
 setInterval(setClock, 1000);
 
 //=============================================================================
@@ -67,19 +72,29 @@ TZRegionButtons.forEach(button => {
     button.addEventListener("click", () => {
         TZRegionButtons.forEach(btn => btn.classList.remove("active-button"));
         button.classList.add("active-button");
-        const region = button.getAttribute("data-region");
+        countryListButtons.innerHTML = "";
+        cityListButtons.innerHTML = "";
+        tzListButtons.innerHTML = "";
+        countryList.style.display = "none";
+        cityList.style.display = "none";
+        tzList.style.display = "none";
+            const region = button.getAttribute("data-region");
         if (region) {
             if (region === "UTC") {
-                countryList.innerHTML = "";
                 selectedTZ = "UTC";
                 TZselector.textContent = "UTC";
-                return; // Skip the "UTC" region - not a country
+                return;
             }
             const countries = getCountriesByRegion(region);
-            countryList.innerHTML = "";
+            countryListButtons.innerHTML = "";
             countries.forEach(country => {
-                countryList.innerHTML += `<button type="button" data-country="${country}">${country}</button>`;
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.setAttribute("data-country", country);
+                btn.textContent = country;
+                countryListButtons.appendChild(btn);
             });
+            countryList.style.display = "";
         }
     });
 });
@@ -88,18 +103,27 @@ TZRegionButtons.forEach(button => {
 // Add click event listener to the country list
 //=============================================================================
 countryList.addEventListener("click", (event) => {
+    cityListButtons.innerHTML = "";
+    tzListButtons.innerHTML = "";
+    cityList.style.display = "none";
+    tzList.style.display = "none";
     const target = event.target as HTMLElement;
     if (target.tagName === "BUTTON") {
         const country = target.getAttribute("data-country");
-        countryList.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+        countryListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
         target.classList.add("active-button");
         if (country) {
             const cities = getCitiesByCountry(country);
-            if(cities.length > 0) {
-                cityList.innerHTML = "";
+            if (cities.length > 0) {
+                cityListButtons.innerHTML = "";
                 cities.forEach(city => {
-                    cityList.innerHTML += `<button type="button" data-city="${city}">${city}</button>`;
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.setAttribute("data-city", city);
+                    btn.textContent = city;
+                    cityListButtons.appendChild(btn);
                 });
+                cityList.style.display = "";
             }
         }
     }
@@ -109,17 +133,24 @@ countryList.addEventListener("click", (event) => {
 // Add click event listener to the city list
 //=============================================================================
 cityList.addEventListener("click", (event) => {
+    tzListButtons.innerHTML = "";
+    tzList.style.display = "none";
     const target = event.target as HTMLElement;
     if (target.tagName === "BUTTON") {
         const city = target.getAttribute("data-city");
-        cityList.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+        cityListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
         target.classList.add("active-button");
         if (city) {
             const timezones = getTimezonesByCity(city);
-            tzList.innerHTML = "";
+            tzListButtons.innerHTML = "";
             timezones.forEach(tz => {
-                tzList.innerHTML += `<button type="button" data-tz="${tz}">${tz}</button>`;
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.setAttribute("data-tz", tz);
+                btn.textContent = tz;
+                tzListButtons.appendChild(btn);
             });
+            tzList.style.display = "";
         }
     }
 });
@@ -131,7 +162,7 @@ tzList.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     if (target.tagName === "BUTTON") {
         const tz = target.getAttribute("data-tz");
-        tzList.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+        tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
         target.classList.add("active-button");
         if (tz) {
             selectedTZ = tz;
