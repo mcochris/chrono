@@ -3,7 +3,7 @@
 import Swal from 'sweetalert2'
 import { DateTime } from 'luxon';
 import tzCountries from './assets/tz-countries.json';
-import tzCities from './assets/tz-cities.json';
+import timezones from './assets/tz-zones.json';
 
 type TzRegion = keyof typeof tzCountries;
 
@@ -11,29 +11,26 @@ const deg = 6;
 const localHour = document.querySelector(".primary-clock .hour") as HTMLDivElement;
 const localMin = document.querySelector(".primary-clock .min") as HTMLDivElement;
 const localSec = document.querySelector(".primary-clock .sec") as HTMLDivElement;
-const utcHour = document.querySelector(".secondary-clock .hour") as HTMLDivElement;
-const utcMin = document.querySelector(".secondary-clock .min") as HTMLDivElement;
-const utcSec = document.querySelector(".secondary-clock .sec") as HTMLDivElement;
+const secondaryHour = document.querySelector(".secondary-clock .hour") as HTMLDivElement;
+const secondaryMin = document.querySelector(".secondary-clock .min") as HTMLDivElement;
+const secondarySec = document.querySelector(".secondary-clock .sec") as HTMLDivElement;
 const TZselector = document.querySelector(".clock-label.secondary-time") as HTMLDivElement;
 const TZRegionButtons = document.querySelectorAll(".region-list-buttons button") as NodeListOf<HTMLButtonElement>;
+const regionListButtons = document.querySelector(".region-list-buttons") as HTMLDivElement;
 const countryList = document.querySelector(".country-list") as HTMLDivElement;
 const countryListButtons = countryList.querySelector(".country-list-buttons") as HTMLDivElement;
-const cityList = document.querySelector(".city-list") as HTMLDivElement;
-const cityListButtons = cityList.querySelector(".city-list-buttons") as HTMLDivElement;
 const tzList = document.querySelector(".tz-list") as HTMLDivElement;
 const tzListButtons = tzList.querySelector(".tz-list-buttons") as HTMLDivElement;
 var selectedTZ: string | null = "UTC";
 
 countryListButtons.innerHTML = "";
-cityListButtons.innerHTML = "";
 tzListButtons.innerHTML = "";
 countryList.style.display = "none";
-cityList.style.display = "none";
 tzList.style.display = "none";
 
 const setClock = () => {
     const now = DateTime.now();
-    const rezoned = now.setZone(selectedTZ || "UTC");
+    const secondaryClock = now.setZone(selectedTZ || "UTC");
 
     const lhh = now.hour * 30;
     const lmm = now.minute * deg;
@@ -42,12 +39,12 @@ const setClock = () => {
     localMin.style.transform = `rotateZ(${lmm}deg)`;
     localSec.style.transform = `rotateZ(${lss}deg)`;
 
-    const uhh = rezoned.hour * 30;
-    const umm = rezoned.minute * deg;
-    const uss = rezoned.second * deg;
-    utcHour.style.transform = `rotateZ(${uhh + umm / 12}deg)`;
-    utcMin.style.transform = `rotateZ(${umm}deg)`;
-    utcSec.style.transform = `rotateZ(${uss}deg)`;
+    const uhh = secondaryClock.hour * 30;
+    const umm = secondaryClock.minute * deg;
+    const uss = secondaryClock.second * deg;
+    secondaryHour.style.transform = `rotateZ(${uhh + umm / 12}deg)`;
+    secondaryMin.style.transform = `rotateZ(${umm}deg)`;
+    secondarySec.style.transform = `rotateZ(${uss}deg)`;
 };
 
 setClock();
@@ -73,10 +70,8 @@ TZRegionButtons.forEach(button => {
         TZRegionButtons.forEach(btn => btn.classList.remove("active-button"));
         button.classList.add("active-button");
         countryListButtons.innerHTML = "";
-        cityListButtons.innerHTML = "";
         tzListButtons.innerHTML = "";
         countryList.style.display = "none";
-        cityList.style.display = "none";
         tzList.style.display = "none";
             const region = button.getAttribute("data-region");
         if (region) {
@@ -103,9 +98,7 @@ TZRegionButtons.forEach(button => {
 // Add click event listener to the country list
 //=============================================================================
 countryList.addEventListener("click", (event) => {
-    cityListButtons.innerHTML = "";
     tzListButtons.innerHTML = "";
-    cityList.style.display = "none";
     tzList.style.display = "none";
     const target = event.target as HTMLElement;
     if (target.tagName === "BUTTON") {
@@ -113,44 +106,18 @@ countryList.addEventListener("click", (event) => {
         countryListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
         target.classList.add("active-button");
         if (country) {
-            const cities = getCitiesByCountry(country);
-            if (cities.length > 0) {
-                cityListButtons.innerHTML = "";
-                cities.forEach(city => {
+            const timezones = getTZByCountry(country);
+            if (timezones.length > 0) {
+                tzListButtons.innerHTML = "";
+                timezones.forEach(tz  => {
                     const btn = document.createElement("button");
                     btn.type = "button";
-                    btn.setAttribute("data-city", city);
-                    btn.textContent = city;
-                    cityListButtons.appendChild(btn);
+                    btn.setAttribute("data-tz", tz);
+                    btn.textContent = tz;
+                    tzListButtons.appendChild(btn);
                 });
-                cityList.style.display = "";
+                tzList.style.display = "";
             }
-        }
-    }
-});
-
-//=============================================================================
-// Add click event listener to the city list
-//=============================================================================
-cityList.addEventListener("click", (event) => {
-    tzListButtons.innerHTML = "";
-    tzList.style.display = "none";
-    const target = event.target as HTMLElement;
-    if (target.tagName === "BUTTON") {
-        const city = target.getAttribute("data-city");
-        cityListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
-        target.classList.add("active-button");
-        if (city) {
-            const timezones = getTimezonesByCity(city);
-            tzListButtons.innerHTML = "";
-            timezones.forEach(tz => {
-                const btn = document.createElement("button");
-                btn.type = "button";
-                btn.setAttribute("data-tz", tz);
-                btn.textContent = tz;
-                tzListButtons.appendChild(btn);
-            });
-            tzList.style.display = "";
         }
     }
 });
@@ -165,29 +132,20 @@ tzList.addEventListener("click", (event) => {
         tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
         target.classList.add("active-button");
         if (tz) {
-            selectedTZ = tz;
-            TZselector.textContent = tz + " (" + DateTime.now().setZone(tz).toFormat("ZZZZ") + ")";
+            let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region")+ "/" + tz.replace(/ /g, '_');
+            TZselector.textContent = tz.replace(/ /g, '_') + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
+            selectedTZ = ianaTZ || tz;
         }
     }
 });
 
 //=============================================================================
-// Returns a sorted, unique list of city names in the given IANA country.
+// Returns a sorted, unique list of timezones in the given IANA country.
 //=============================================================================
-function getCitiesByCountry(country: string): string[] {
-    return Object.prototype.hasOwnProperty.call(tzCities, country)
-        ? (tzCities as Record<string, string[]>)[country]
+function getTZByCountry(country: string): string[] {
+    return Object.prototype.hasOwnProperty.call(timezones, country)
+        ? (timezones as Record<string, string[]>)[country]
         : [];
-}
-
-//=============================================================================
-// Returns IANA timezone identifiers whose city component matches the given name.
-//=============================================================================
-function getTimezonesByCity(city: string): string[] {
-    const cityKey = city.replace(/ /g, '_');
-    return (Intl as unknown as { supportedValuesOf(key: string): string[] })
-        .supportedValuesOf('timeZone')
-        .filter(tz => tz.split('/').pop() === cityKey);
 }
 
 //=============================================================================

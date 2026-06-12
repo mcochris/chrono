@@ -13,8 +13,6 @@
 * {
 	box-sizing: border-box;
 	font-family: monospace;
-	text-transform: uppercase;
-	letter-spacing: 4px;
 }
 
 body {
@@ -22,7 +20,6 @@ body {
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
-	/* justify-content: space-between; */
 	align-items: center;
 	font-size: 16px;
 	background-color: var(--main-bg-color);
@@ -34,9 +31,8 @@ body {
 	font-size: 2rem;
 	color: var(--main-text-color);
 	padding: 2rem 0;
-	/* font-family: monospace;
 	text-transform: uppercase;
-	letter-spacing: 4px; */
+	letter-spacing: 4px;
 	transition: all ease 0.2s;
 }
 
@@ -47,7 +43,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	background-color: var(--main-bg-color);
-	/* background-image: url("https://imvpn22.github.io/analog-clock/clock.png"); */
 	background-image: url("/src/assets/clock.png");
 	background-position: center center;
 	background-size: cover;
