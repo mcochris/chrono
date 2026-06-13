@@ -1,6 +1,5 @@
 // This code is partially adapted from https://codepen.io/imvpn22/pen/RwPvOgQ
 
-// import Swal from 'sweetalert2'
 import { DateTime } from 'luxon';
 import tzCountries from './assets/tz-countries.json';
 import timezones from './assets/tz-zones.json';
