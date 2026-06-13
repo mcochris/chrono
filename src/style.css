@@ -2,7 +2,7 @@
 
 :root {
 	--main-bg-color: whitesmoke;
-	--main-text-color: #888888;
+	--main-text-color: gray;
 }
 
 [data-theme="dark"] {
@@ -111,7 +111,7 @@ body {
 	content: "";
 	height: 60%;
 	width: 2px;
-	background-color: #f00;
+	background-color: red;
 	border-radius: 2px;
 }
 
@@ -189,4 +189,9 @@ body {
 .active-button {
 	background-color: var(--main-text-color);
 	color: var(--main-bg-color);
+}
+
+.disabled-button {
+    opacity: 0.5;
+    pointer-events: none;
 }

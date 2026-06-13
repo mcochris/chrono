@@ -1,6 +1,6 @@
 // This code is partially adapted from https://codepen.io/imvpn22/pen/RwPvOgQ
 
-import Swal from 'sweetalert2'
+// import Swal from 'sweetalert2'
 import { DateTime } from 'luxon';
 import tzCountries from './assets/tz-countries.json';
 import timezones from './assets/tz-zones.json';
@@ -20,18 +20,23 @@ const regionListButtons = document.querySelector(".region-list-buttons") as HTML
 const countryList = document.querySelector(".country-list") as HTMLDivElement;
 const countryListButtons = countryList.querySelector(".country-list-buttons") as HTMLDivElement;
 const tzList = document.querySelector(".tz-list") as HTMLDivElement;
+const tzPicker = document.querySelector(".tz-picker") as HTMLDivElement;
 const tzListButtons = tzList.querySelector(".tz-list-buttons") as HTMLDivElement;
 const primaryClockTZ = document.querySelector(".primary-clock-tz") as HTMLSpanElement;
 const tzPickerExitButton = document.querySelector(".tz-picker-exit-button") as HTMLButtonElement;
 const tzPickerDoneButton = document.querySelector(".tz-picker-done-button") as HTMLButtonElement;
 var selectedTZ: string | null = "UTC";
 
-countryListButtons.innerHTML = "";
-tzListButtons.innerHTML = "";
-countryList.style.display = "none";
-tzList.style.display = "none";
+clearTZPicker();
+setClock();
+setInterval(setClock, 1000);
 
-const setClock = () => {
+//=============================================================================
+// Updates the rotation of the clock hands based on the current time in the
+// local timezone and the selected secondary timezone. Also updates the
+// timezone label for the primary clock.
+//=============================================================================
+function setClock() {
     const now = DateTime.now();
     primaryClockTZ.textContent = now.zoneName + " (" + now.toFormat("ZZZZ") + ")";
     const secondaryClock = now.setZone(selectedTZ || "UTC");
@@ -51,19 +56,30 @@ const setClock = () => {
     secondarySec.style.transform = `rotateZ(${uss}deg)`;
 };
 
-setClock();
-setInterval(setClock, 1000);
+//=============================================================================
+// Resets the timezone picker to its initial state by hiding the country and
+// timezone lists, clearing the buttons, and removing the active button styles.
+//=============================================================================
+function clearTZPicker() {
+    countryList.style.display = "none";
+    tzList.style.display = "none";
+    countryListButtons.innerHTML = "";
+    tzListButtons.innerHTML = "";
+    TZRegionButtons.forEach(btn => btn.classList.remove("active-button"));
+    countryListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+    tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+}
 
 //=============================================================================
-// Add click event listener to the timezone selector
+// Add click event listener to the timezone selector div. Toggles the
+// visibility of the timezone picker div.
 //=============================================================================
 TZselector.addEventListener("click", () => {
-    Swal.fire({
-        title: 'Error!',
-        text: 'Do you want to continue',
-        icon: 'error',
-        confirmButtonText: 'Cool'
-    })
+    tzPicker.style.display === "none"
+        ? tzPicker.style.display = ""
+        : tzPicker.style.display = "none";
+
+    clearTZPicker();
 });
 
 //=============================================================================
@@ -77,7 +93,7 @@ TZRegionButtons.forEach(button => {
         tzListButtons.innerHTML = "";
         countryList.style.display = "none";
         tzList.style.display = "none";
-            const region = button.getAttribute("data-region");
+        const region = button.getAttribute("data-region");
         if (region) {
             if (region === "UTC") {
                 selectedTZ = "UTC";
@@ -113,7 +129,7 @@ countryList.addEventListener("click", (event) => {
             const timezones = getTZByCountry(country);
             if (timezones.length > 0) {
                 tzListButtons.innerHTML = "";
-                timezones.forEach(tz  => {
+                timezones.forEach(tz => {
                     const btn = document.createElement("button");
                     btn.type = "button";
                     btn.setAttribute("data-tz", tz);
@@ -136,11 +152,11 @@ tzList.addEventListener("click", (event) => {
         tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
         target.classList.add("active-button");
         if (tz) {
-            let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region")+ "/" + tz.replace(/ /g, '_');
+            let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
             const cityName = tz.split('/').pop()!.replace(/ /g, '_');
             TZselector.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
-            console.log("ianaTZ:", ianaTZ);
             selectedTZ = ianaTZ || tz;
+            tzPickerDoneButton.classList.remove("disabled-button");
         }
     }
 });
@@ -163,3 +179,15 @@ function getCountriesByRegion(region: string): string[] {
         ? [...tzCountries[key]].sort()
         : [];
 }
+
+//=============================================================================
+// Add click event listener to the exit button. Resets the timezone picker to
+// its initial state and hides the TZ picker div.
+//=============================================================================
+tzPickerExitButton.addEventListener("click", () => {
+    countryListButtons.innerHTML = "";
+    tzListButtons.innerHTML = "";
+    countryList.style.display = "none";
+    tzPicker.style.display = "none";
+    regionListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
+});
