@@ -21,6 +21,9 @@ const countryList = document.querySelector(".country-list") as HTMLDivElement;
 const countryListButtons = countryList.querySelector(".country-list-buttons") as HTMLDivElement;
 const tzList = document.querySelector(".tz-list") as HTMLDivElement;
 const tzListButtons = tzList.querySelector(".tz-list-buttons") as HTMLDivElement;
+const primaryClockTZ = document.querySelector(".primary-clock-tz") as HTMLSpanElement;
+const tzPickerExitButton = document.querySelector(".tz-picker-exit-button") as HTMLButtonElement;
+const tzPickerDoneButton = document.querySelector(".tz-picker-done-button") as HTMLButtonElement;
 var selectedTZ: string | null = "UTC";
 
 countryListButtons.innerHTML = "";
@@ -30,6 +33,7 @@ tzList.style.display = "none";
 
 const setClock = () => {
     const now = DateTime.now();
+    primaryClockTZ.textContent = now.zoneName + " (" + now.toFormat("ZZZZ") + ")";
     const secondaryClock = now.setZone(selectedTZ || "UTC");
 
     const lhh = now.hour * 30;
@@ -113,7 +117,7 @@ countryList.addEventListener("click", (event) => {
                     const btn = document.createElement("button");
                     btn.type = "button";
                     btn.setAttribute("data-tz", tz);
-                    btn.textContent = tz;
+                    btn.textContent = tz.split('/').pop()!.replace(/_/g, ' ');
                     tzListButtons.appendChild(btn);
                 });
                 tzList.style.display = "";
@@ -133,7 +137,9 @@ tzList.addEventListener("click", (event) => {
         target.classList.add("active-button");
         if (tz) {
             let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region")+ "/" + tz.replace(/ /g, '_');
-            TZselector.textContent = tz.replace(/ /g, '_') + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
+            const cityName = tz.split('/').pop()!.replace(/ /g, '_');
+            TZselector.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
+            console.log("ianaTZ:", ianaTZ);
             selectedTZ = ianaTZ || tz;
         }
     }
