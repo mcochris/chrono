@@ -20,7 +20,7 @@ const regionListButtons = document.querySelector(".region-list-buttons") as HTML
 const countryList = document.querySelector(".country-list") as HTMLDivElement;
 const countryListButtons = countryList.querySelector(".country-list-buttons") as HTMLDivElement;
 const tzList = document.querySelector(".tz-list") as HTMLDivElement;
-const tzPicker = document.querySelector(".tz-picker") as HTMLDivElement;
+const tzPicker = document.querySelector(".tz-picker") as HTMLDialogElement;
 const tzListButtons = tzList.querySelector(".tz-list-buttons") as HTMLDivElement;
 const primaryClockTZ = document.querySelector(".primary-clock-tz") as HTMLSpanElement;
 const tzPickerExitButton = document.querySelector(".tz-picker-exit-button") as HTMLButtonElement;
@@ -75,10 +75,11 @@ function clearTZPicker() {
 // visibility of the timezone picker div.
 //=============================================================================
 TZselector.addEventListener("click", () => {
-    tzPicker.style.display === "none"
-        ? tzPicker.style.display = ""
-        : tzPicker.style.display = "none";
+    tzPicker.open ? tzPicker.close() : tzPicker.showModal();
+    clearTZPicker();
+});
 
+tzPicker.addEventListener("cancel", () => {
     clearTZPicker();
 });
 
@@ -188,6 +189,6 @@ tzPickerExitButton.addEventListener("click", () => {
     countryListButtons.innerHTML = "";
     tzListButtons.innerHTML = "";
     countryList.style.display = "none";
-    tzPicker.style.display = "none";
+    tzPicker.close();
     regionListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
 });

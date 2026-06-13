@@ -152,20 +152,24 @@ body {
 }
 
 .tz-picker {
+	border: 1px solid var(--main-text-color);
+	border-radius: 8px;
+	background-color: var(--main-bg-color);
+	color: var(--main-text-color);
+	width: 80%;
+	padding: 1rem;
+}
+
+.tz-picker[open] {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 1rem;
-	padding: 1rem;
-	border: 1px solid var(--main-text-color);
-	border-radius: 8px;
-	background-color: var(--main-bg-color);
-	color: var(--main-text-color);
-	top: 50%;
-	width: 80%;
-	margin-top: 2rem;
-	z-index: 1000;
+}
+
+.tz-picker::backdrop {
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .region-list-buttons,
