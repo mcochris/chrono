@@ -118,7 +118,7 @@ body {
 .clocks-container {
 	display: flex;
 	flex-direction: row;
-	gap: 4rem;
+	gap: 14rem;
 	align-items: center;
 	justify-content: center;
 	flex-wrap: wrap;
@@ -149,6 +149,14 @@ body {
 
 .clock-label.secondary-time:hover {
 	border: 1px solid var(--main-text-color);
+}
+
+.date {
+    padding-top: 2rem;
+    font-size: 1.5rem;
+    color: var(--main-text-color);
+    font-family: monospace;
+    transition: all ease 0.2s;
 }
 
 .tz-picker {
