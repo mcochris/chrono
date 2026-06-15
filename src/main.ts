@@ -194,8 +194,7 @@ function getCountriesByRegion(region: string): string[] {
 	return Object.prototype.hasOwnProperty.call(tzCountries, key)
 		? [...tzCountries[key]].sort()
 		: [];
-}//=============================================================================
-
+}
 
 //=============================================================================
 // Add click event listener to the exit button. Resets the timezone picker to
@@ -206,6 +205,10 @@ tzPickerExitButton.addEventListener("click", () => {
 	clearTZPicker();
 });
 
+//=============================================================================
+// Click handler for "Done" button in TZ selector. Selects the specified TZ, 
+// updates the display, and closes the TZ picker.
+//=============================================================================
 tzPickerDoneButton.addEventListener("click", () => {
 	const activeTZButton = tzListButtons.querySelector("button.active-button");
 	if (activeTZButton) {
