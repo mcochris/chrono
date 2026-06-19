@@ -26,11 +26,19 @@ const tzPickerExitButton = document.querySelector(".tz-picker-exit-button") as H
 const tzPickerDoneButton = document.querySelector(".tz-picker-done-button") as HTMLButtonElement;
 const primaryDateLabel = document.querySelector(".primary-date") as HTMLDivElement;
 const secondaryDateLabel = document.querySelector(".secondary-date") as HTMLDivElement;
-var selectedTZ: string | null = "UTC";
+// const timeDiffDiv = document.querySelector(".time-diff") as HTMLDivElement;
+// const primaryTimeDiv = document.querySelector(".primary-time") as HTMLDivElement;
+// const secondaryTimeDiv = document.querySelector(".secondary-time") as HTMLDivElement;
+const primaryTimeLegend = document.querySelector(".primary-time-legend") as HTMLDivElement;
+const secondaryTimeLegend = document.querySelector(".secondary-time-legend") as HTMLDivElement;
+
+var primaryTZ = DateTime.now().zoneName;
+var secondaryTZ: string = "UTC";
 
 clearTZPicker();
 setClock();
 setInterval(setClock, 1000);
+setTZDiff(primaryTZ, secondaryTZ || "UTC");
 
 //=============================================================================
 // Updates the rotation of the clock hands based on the current time in the
@@ -38,22 +46,24 @@ setInterval(setClock, 1000);
 // timezone label for the primary clock.
 //=============================================================================
 function setClock() {
-	const now = DateTime.now();
-	primaryClockTZ.textContent = now.zoneName + " (" + now.toFormat("ZZZZ") + ")";
-	primaryDateLabel.textContent = now.toFormat("DDDD");
-	const secondaryClock = now.setZone(selectedTZ || "UTC");
-	secondaryDateLabel.textContent = secondaryClock.toFormat("DDDD");
+	primaryTZ = DateTime.now().zoneName;
+	primaryClockTZ.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
+	primaryTimeLegend.textContent = DateTime.now().toFormat("hh:mm:ss a");
+	primaryDateLabel.textContent = DateTime.now().toFormat("DDDD");
+	secondaryTZ = secondaryTZ || "UTC";
+	secondaryTimeLegend.textContent = DateTime.now().setZone(secondaryTZ).toFormat("hh:mm:ss a");
+	secondaryDateLabel.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
 
-	const lhh = now.hour * 30;
-	const lmm = now.minute * deg;
-	const lss = now.second * deg;
+	const lhh = DateTime.now().hour * 30;
+	const lmm = DateTime.now().minute * deg;
+	const lss = DateTime.now().second * deg;
 	localHour.style.transform = `rotateZ(${lhh + lmm / 12}deg)`;
 	localMin.style.transform = `rotateZ(${lmm}deg)`;
 	localSec.style.transform = `rotateZ(${lss}deg)`;
 
-	const uhh = secondaryClock.hour * 30;
-	const umm = secondaryClock.minute * deg;
-	const uss = secondaryClock.second * deg;
+	const uhh = DateTime.now().setZone(secondaryTZ).hour * 30;
+	const umm = DateTime.now().setZone(secondaryTZ).minute * deg;
+	const uss = DateTime.now().setZone(secondaryTZ).second * deg;
 	secondaryHour.style.transform = `rotateZ(${uhh + umm / 12}deg)`;
 	secondaryMin.style.transform = `rotateZ(${umm}deg)`;
 	secondarySec.style.transform = `rotateZ(${uss}deg)`;
@@ -101,7 +111,7 @@ TZRegionButtons.forEach(button => {
 		const region = button.getAttribute("data-region");
 		if (region) {
 			if (region === "UTC") {
-				selectedTZ = "UTC";
+				secondaryTZ = "UTC";
 				TZselector.textContent = "UTC";
 				return;
 			}
@@ -158,10 +168,10 @@ tzList.addEventListener("click", (event) => {
 		tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
 		target.classList.add("active-button");
 		if (tz) {
-		// 	let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
-		// 	const cityName = tz.split('/').pop()!.replace(/ /g, '_');
-		// 	TZselector.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
-		// 	selectedTZ = ianaTZ || tz;
+			// 	let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
+			// 	const cityName = tz.split('/').pop()!.replace(/ /g, '_');
+			// 	TZselector.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
+			// 	selectedTZ = ianaTZ || tz;
 			tzPickerDoneButton.classList.remove("disabled-button");
 		}
 	}
@@ -217,9 +227,44 @@ tzPickerDoneButton.addEventListener("click", () => {
 			let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
 			const cityName = tz.split('/').pop()!.replace(/ /g, '_');
 			TZselector.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
-			selectedTZ = ianaTZ || tz;
+			secondaryTZ = ianaTZ || tz;
 			tzPicker.close();
 			clearTZPicker();
 		}
 	}
 });
+
+//=============================================================================
+// Once the TZ picker is closed, calculate the time difference between the
+// local timezone and the selected secondary timezone, and display the
+// difference in hours and minutes in between the two clocks.
+//=============================================================================
+tzPicker.addEventListener("close", () => {
+    setTZDiff(primaryTZ, secondaryTZ || "UTC");
+// 	console.log("Calculating time difference...");
+// 	const offsetDiffMinutes = secondaryClockTime.offset - primaryClockTime.offset;
+// 	const hours = Math.trunc(offsetDiffMinutes / 60);
+// 	const minutes = Math.abs(offsetDiffMinutes % 60);
+// 	timeDiffDiv.textContent =
+// 		(offsetDiffMinutes < 0 ? "-" : "+") +
+// 		String(Math.abs(hours)).padStart(2, '0') + ":" + String(minutes).padStart(2, '0');
+	// if (selectedTZ) {
+	//     const primaryOffset = DateTime.now().offset;
+	//     const secondaryOffset = DateTime.now().setZone(selectedTZ).offset;
+	//     const offsetDiff = secondaryOffset - primaryOffset;
+	//     const hoursDiff = Math.floor(Math.abs(offsetDiff) / 60);
+	//     const minutesDiff = Math.abs(offsetDiff) % 60;
+	//     const sign = offsetDiff >= 0 ? "+" : "-";
+	//     const formattedDiff = `UTC${sign}${String(hoursDiff).padStart(2, '0')}:${String(minutesDiff).padStart(2, '0')}`;
+	//     document.querySelector(".offset-diff")!.textContent = formattedDiff;
+	// }
+});
+
+function setTZDiff(tz1: string, tz2: string) {
+    const offsetDiffMinutes = DateTime.now().setZone(tz2).offset - DateTime.now().setZone(tz1).offset;
+    const hours = Math.trunc(offsetDiffMinutes / 60);
+    const minutes = Math.abs(offsetDiffMinutes % 60);
+    (document.querySelector(".time-diff") as HTMLDivElement).textContent =
+        (offsetDiffMinutes < 0 ? "-" : "+") +
+        String(Math.abs(hours)).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + " ➡️";
+}
