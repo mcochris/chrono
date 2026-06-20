@@ -256,5 +256,5 @@ function setTZDiff(tz1: string, tz2: string) {
     }
     
     timeDiffDiv.innerHTML = 
-        String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s") + " " + String(minutes).padStart(2, '0') + " minute" + (minutes === 1 ? "" : "s");
+        String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s") + " " + String(minutes) + " minutes";
 }
