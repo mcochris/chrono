@@ -115,7 +115,7 @@ body {
 	border-radius: 2px;
 }
 
-.clocks-container {
+.clocks-container, .clock-legend-container {
 	display: flex;
 	flex-direction: row;
 	gap: 14rem;
@@ -124,20 +124,30 @@ body {
 	flex-wrap: wrap;
 }
 
-.clock-section {
+.clock-legend-container {
+    gap: 4rem;
+}
+
+.clock-section, .clock-legend {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 1rem;
 }
 
-.clock-label {
+.clock-label, .clock-legend {
 	font-size: 1rem;
 	color: var(--main-text-color);
-	font-family: monospace;
 	text-transform: uppercase;
 	letter-spacing: 3px;
 	transition: all ease 0.2s;
+}
+
+.clock-legend {
+	padding-top: 2rem;
+    font-size: 1.25rem;
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 .clock-label.secondary-time {
@@ -155,7 +165,6 @@ body {
     padding-top: 2rem;
     font-size: 1.5rem;
     color: var(--main-text-color);
-    font-family: monospace;
     transition: all ease 0.2s;
 }
 
@@ -206,4 +215,10 @@ body {
 .disabled-button {
     opacity: 0.5;
     pointer-events: none;
+}
+
+.time-diff {
+    font-size: 1.25rem;
+    color: var(--main-text-color);
+    transition: all ease 0.2s;
 }

@@ -24,9 +24,9 @@ const tzListButtons = tzList.querySelector(".tz-list-buttons") as HTMLDivElement
 const primaryClockTZ = document.querySelector(".primary-clock-tz") as HTMLSpanElement;
 const tzPickerExitButton = document.querySelector(".tz-picker-exit-button") as HTMLButtonElement;
 const tzPickerDoneButton = document.querySelector(".tz-picker-done-button") as HTMLButtonElement;
-const primaryDateLabel = document.querySelector(".primary-date") as HTMLDivElement;
-const secondaryDateLabel = document.querySelector(".secondary-date") as HTMLDivElement;
-// const timeDiffDiv = document.querySelector(".time-diff") as HTMLDivElement;
+const primaryDateLegend = document.querySelector(".primary-date-legend") as HTMLDivElement;
+const secondaryDateLegend = document.querySelector(".secondary-date-legend") as HTMLDivElement;
+const timeDiffDiv = document.querySelector(".time-diff") as HTMLDivElement;
 // const primaryTimeDiv = document.querySelector(".primary-time") as HTMLDivElement;
 // const secondaryTimeDiv = document.querySelector(".secondary-time") as HTMLDivElement;
 const primaryTimeLegend = document.querySelector(".primary-time-legend") as HTMLDivElement;
@@ -49,10 +49,10 @@ function setClock() {
 	primaryTZ = DateTime.now().zoneName;
 	primaryClockTZ.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
 	primaryTimeLegend.textContent = DateTime.now().toFormat("hh:mm:ss a");
-	primaryDateLabel.textContent = DateTime.now().toFormat("DDDD");
+	primaryDateLegend.textContent = DateTime.now().toFormat("DDDD");
 	secondaryTZ = secondaryTZ || "UTC";
 	secondaryTimeLegend.textContent = DateTime.now().setZone(secondaryTZ).toFormat("hh:mm:ss a");
-	secondaryDateLabel.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
+	secondaryDateLegend.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
 
 	const lhh = DateTime.now().hour * 30;
 	const lmm = DateTime.now().minute * deg;
@@ -235,36 +235,26 @@ tzPickerDoneButton.addEventListener("click", () => {
 });
 
 //=============================================================================
-// Once the TZ picker is closed, calculate the time difference between the
-// local timezone and the selected secondary timezone, and display the
-// difference in hours and minutes in between the two clocks.
+// Once the TZ picker is closed, update the time difference and refresh the
+// clocks.
 //=============================================================================
 tzPicker.addEventListener("close", () => {
     setTZDiff(primaryTZ, secondaryTZ || "UTC");
-// 	console.log("Calculating time difference...");
-// 	const offsetDiffMinutes = secondaryClockTime.offset - primaryClockTime.offset;
-// 	const hours = Math.trunc(offsetDiffMinutes / 60);
-// 	const minutes = Math.abs(offsetDiffMinutes % 60);
-// 	timeDiffDiv.textContent =
-// 		(offsetDiffMinutes < 0 ? "-" : "+") +
-// 		String(Math.abs(hours)).padStart(2, '0') + ":" + String(minutes).padStart(2, '0');
-	// if (selectedTZ) {
-	//     const primaryOffset = DateTime.now().offset;
-	//     const secondaryOffset = DateTime.now().setZone(selectedTZ).offset;
-	//     const offsetDiff = secondaryOffset - primaryOffset;
-	//     const hoursDiff = Math.floor(Math.abs(offsetDiff) / 60);
-	//     const minutesDiff = Math.abs(offsetDiff) % 60;
-	//     const sign = offsetDiff >= 0 ? "+" : "-";
-	//     const formattedDiff = `UTC${sign}${String(hoursDiff).padStart(2, '0')}:${String(minutesDiff).padStart(2, '0')}`;
-	//     document.querySelector(".offset-diff")!.textContent = formattedDiff;
-	// }
+    setClock();
 });
 
+//=============================================================================
+// Calculates the time difference between two timezones and updates the display
+//=============================================================================
 function setTZDiff(tz1: string, tz2: string) {
     const offsetDiffMinutes = DateTime.now().setZone(tz2).offset - DateTime.now().setZone(tz1).offset;
     const hours = Math.trunc(offsetDiffMinutes / 60);
     const minutes = Math.abs(offsetDiffMinutes % 60);
-    (document.querySelector(".time-diff") as HTMLDivElement).textContent =
-        (offsetDiffMinutes < 0 ? "-" : "+") +
-        String(Math.abs(hours)).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + " ➡️";
+    if(hours === 0 && minutes === 0) {
+        timeDiffDiv.innerHTML = "No time difference";
+        return;
+    }
+    
+    timeDiffDiv.innerHTML = 
+        String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s") + " " + String(minutes).padStart(2, '0') + " minute" + (minutes === 1 ? "" : "s");
 }

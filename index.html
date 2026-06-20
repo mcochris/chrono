@@ -2,76 +2,85 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="/src/assets/puffy.png?v=2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chrono</title>
-    <link rel="stylesheet" href="/src/style.css">
-    <script type="module" src="/src/main.ts"></script>
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/png" href="/src/assets/puffy.png?v=2">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chrono</title>
+	<link rel="stylesheet" href="/src/style.css">
+	<script type="module" src="/src/main.ts"></script>
 </head>
 
 <body>
-    <div class="page-header">Chrono</div>
+	<div class="page-header">Chrono</div>
 
-    <div class="clocks-container">
-        <div class="clock-section primary-clock">
-            <div class="clock-label primary-time"><span class="primary-clock-tz"></span></div>
-            <div class="clock">
-                <div class="hour"></div>
-                <div class="min"></div>
-                <div class="sec"></div>
-            </div>
-            <div class="date primary-time-legend">Primary time</div>
-            <div class="date primary-date">Primary date</div> 
-        </div>
+	<div class="clocks-container">
+		<div class="clock-section primary-clock">
+			<div class="clock-label primary-time"><span class="primary-clock-tz"></span></div>
+			<div class="clock">
+				<div class="hour"></div>
+				<div class="min"></div>
+				<div class="sec"></div>
+			</div>
+		</div>
 
-        <div class="time-diff"></div>
+		<div class="clock-section secondary-clock">
+			<button type="button" class="clock-label secondary-time">UTC</button>
+			<div class="clock">
+				<div class="hour"></div>
+				<div class="min"></div>
+				<div class="sec"></div>
+			</div>
+		</div>
+	</div>
 
-        <div class="clock-section secondary-clock">
-            <button type="button" class="clock-label secondary-time">UTC</button>
-            <div class="clock">
-                <div class="hour"></div>
-                <div class="min"></div>
-                <div class="sec"></div>
-            </div>
-            <div class="date secondary-time-legend">Secondary time</div> 
-            <div class="date secondary-date">Secondary date</div> 
-        </div>
-    </div>
+	<div class="clock-legend-container">
+		<div class="clock-legend primary-clock-legend">
+			<div class="primary-time-legend">Primary time</div>
+			<div class="primary-date-legend">Primary date</div>
+		</div>
+		<div class="clock-legend time-diff-legend">
+			<div class="time-diff-legend-header">Time difference:</div>
+			<div class="time-diff">0 hours 00 minutes</div>
+		</div>
+		<div class="clock-legend secondary-clock-legend">
+			<div class="secondary-time-legend">Secondary time</div>
+			<div class="secondary-date-legend">Secondary date</div>
+		</div>
+	</div>
 
-    <dialog class="tz-picker">
-        <div class="region-list">
-            <div class="region-list-header">Select region:</div>
-            <div class="region-list-buttons">
-                <button type="button" data-region="Africa">Africa</button>
-                <button type="button" data-region="America">America</button>
-                <button type="button" data-region="Antarctica">Antarctica</button>
-                <button type="button" data-region="Arctic">Arctic</button>
-                <button type="button" data-region="Asia">Asia</button>
-                <button type="button" data-region="Atlantic">Atlantic</button>
-                <button type="button" data-region="Australia">Australia</button>
-                <button type="button" data-region="UTC">UTC/GMT</button>
-                <button type="button" data-region="Europe">Europe</button>
-                <button type="button" data-region="Indian">Indian</button>
-                <button type="button" data-region="Pacific">Pacific</button>
-            </div>
-        </div>
+	<dialog class="tz-picker">
+		<div class="region-list">
+			<div class="region-list-header">Select region:</div>
+			<div class="region-list-buttons">
+				<button type="button" data-region="Africa">Africa</button>
+				<button type="button" data-region="America">America</button>
+				<button type="button" data-region="Antarctica">Antarctica</button>
+				<button type="button" data-region="Arctic">Arctic</button>
+				<button type="button" data-region="Asia">Asia</button>
+				<button type="button" data-region="Atlantic">Atlantic</button>
+				<button type="button" data-region="Australia">Australia</button>
+				<button type="button" data-region="UTC">UTC/GMT</button>
+				<button type="button" data-region="Europe">Europe</button>
+				<button type="button" data-region="Indian">Indian</button>
+				<button type="button" data-region="Pacific">Pacific</button>
+			</div>
+		</div>
 
-        <div class="country-list">
-            <div class="country-list-header">Select country:</div>
-            <div class="country-list-buttons"></div>
-        </div>
+		<div class="country-list">
+			<div class="country-list-header">Select country:</div>
+			<div class="country-list-buttons"></div>
+		</div>
 
-        <div class="tz-list">
-            <div class="tz-list-header">Select timezone:</div>
-            <div class="tz-list-buttons"></div>
-        </div>
+		<div class="tz-list">
+			<div class="tz-list-header">Select timezone:</div>
+			<div class="tz-list-buttons"></div>
+		</div>
 
-        <div class="tz-picker-footer">
-            <button type="button" class="tz-picker-exit-button">Exit</button>
-            <button type="button" class="tz-picker-done-button disabled-button">Done</button>
-        </div>
-    </dialog>
+		<div class="tz-picker-footer">
+			<button type="button" class="tz-picker-exit-button">Exit</button>
+			<button type="button" class="tz-picker-done-button disabled-button">Done</button>
+		</div>
+	</dialog>
 
 </body>
 
