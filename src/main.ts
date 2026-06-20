@@ -27,12 +27,11 @@ const tzPickerDoneButton = document.querySelector(".tz-picker-done-button") as H
 const primaryDateLegend = document.querySelector(".primary-date-legend") as HTMLDivElement;
 const secondaryDateLegend = document.querySelector(".secondary-date-legend") as HTMLDivElement;
 const timeDiffDiv = document.querySelector(".time-diff") as HTMLDivElement;
-// const primaryTimeDiv = document.querySelector(".primary-time") as HTMLDivElement;
-// const secondaryTimeDiv = document.querySelector(".secondary-time") as HTMLDivElement;
 const primaryTimeLegend = document.querySelector(".primary-time-legend") as HTMLDivElement;
 const secondaryTimeLegend = document.querySelector(".secondary-time-legend") as HTMLDivElement;
+const countryListHeader = countryList.querySelector(".country-list-header") as HTMLDivElement;
 
-var primaryTZ = DateTime.now().zoneName;
+var primaryTZ: string = DateTime.now().zoneName;
 var secondaryTZ: string = "UTC";
 
 clearTZPicker();
@@ -111,9 +110,10 @@ TZRegionButtons.forEach(button => {
 		const region = button.getAttribute("data-region");
 		if (region) {
 			if (region === "UTC") {
-				secondaryTZ = "UTC";
-				TZselector.textContent = "UTC";
-				return;
+				tzPickerDoneButton.classList.remove("disabled-button");
+				countryListHeader.textContent = "UTC is a single timezone with no country associations.";
+			} else {
+				countryListHeader.textContent = "Select country:";
 			}
 			const countries = getCountriesByRegion(region);
 			countryListButtons.innerHTML = "";
@@ -168,10 +168,6 @@ tzList.addEventListener("click", (event) => {
 		tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
 		target.classList.add("active-button");
 		if (tz) {
-			// 	let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
-			// 	const cityName = tz.split('/').pop()!.replace(/ /g, '_');
-			// 	TZselector.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
-			// 	selectedTZ = ianaTZ || tz;
 			tzPickerDoneButton.classList.remove("disabled-button");
 		}
 	}
@@ -231,6 +227,11 @@ tzPickerDoneButton.addEventListener("click", () => {
 			tzPicker.close();
 			clearTZPicker();
 		}
+	} else {
+		TZselector.textContent = "UTC";
+		secondaryTZ = "UTC";
+		tzPicker.close();
+		clearTZPicker();
 	}
 });
 
@@ -239,22 +240,25 @@ tzPickerDoneButton.addEventListener("click", () => {
 // clocks.
 //=============================================================================
 tzPicker.addEventListener("close", () => {
-    setTZDiff(primaryTZ, secondaryTZ || "UTC");
-    setClock();
+	setTZDiff(primaryTZ, secondaryTZ || "UTC");
+	setClock();
 });
 
 //=============================================================================
 // Calculates the time difference between two timezones and updates the display
 //=============================================================================
 function setTZDiff(tz1: string, tz2: string) {
-    const offsetDiffMinutes = DateTime.now().setZone(tz2).offset - DateTime.now().setZone(tz1).offset;
-    const hours = Math.trunc(offsetDiffMinutes / 60);
-    const minutes = Math.abs(offsetDiffMinutes % 60);
-    if(hours === 0 && minutes === 0) {
-        timeDiffDiv.innerHTML = "No time difference";
-        return;
-    }
-    
-    timeDiffDiv.innerHTML = 
-        String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s") + " " + String(minutes) + " minutes";
+	const offsetDiffMinutes = DateTime.now().setZone(tz2).offset - DateTime.now().setZone(tz1).offset;
+	const hours = Math.trunc(offsetDiffMinutes / 60);
+	const minutes = Math.abs(offsetDiffMinutes % 60);
+	if (hours === 0 && minutes === 0) {
+		timeDiffDiv.innerHTML = "No time difference";
+		return;
+	}
+
+	if (minutes === 0) {
+		timeDiffDiv.innerHTML = String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s");
+	} else {
+		timeDiffDiv.innerHTML = String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s") + " " + String(minutes) + " minutes";
+	}
 }
