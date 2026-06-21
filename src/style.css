@@ -115,7 +115,8 @@ body {
 	border-radius: 2px;
 }
 
-.clocks-container, .clock-legend-container {
+.clocks-container,
+.clock-legend-container {
 	display: flex;
 	flex-direction: row;
 	gap: 14rem;
@@ -125,17 +126,19 @@ body {
 }
 
 .clock-legend-container {
-    gap: 4rem;
+	gap: 4rem;
 }
 
-.clock-section, .clock-legend {
+.clock-section,
+.clock-legend {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 1rem;
 }
 
-.clock-label, .clock-legend {
+.clock-label,
+.clock-legend {
 	font-size: 1rem;
 	color: var(--main-text-color);
 	text-transform: uppercase;
@@ -145,9 +148,9 @@ body {
 
 .clock-legend {
 	padding-top: 2rem;
-    font-size: 1.25rem;
-    text-transform: none;
-    letter-spacing: 0;
+	font-size: 1.25rem;
+	text-transform: none;
+	letter-spacing: 0;
 }
 
 .clock-label.secondary-time {
@@ -162,10 +165,10 @@ body {
 }
 
 .date {
-    padding-top: 2rem;
-    font-size: 1.5rem;
-    color: var(--main-text-color);
-    transition: all ease 0.2s;
+	padding-top: 2rem;
+	font-size: 1.5rem;
+	color: var(--main-text-color);
+	transition: all ease 0.2s;
 }
 
 .tz-picker {
@@ -213,12 +216,19 @@ body {
 }
 
 .disabled-button {
-    opacity: 0.5;
-    pointer-events: none;
+	opacity: 0.5;
+	pointer-events: none;
 }
 
 .time-diff {
-    font-size: 1.25rem;
-    color: var(--main-text-color);
-    transition: all ease 0.2s;
+	font-size: 1.25rem;
+	color: var(--main-text-color);
+	transition: all ease 0.2s;
+}
+
+footer {
+	margin-top: auto;
+	padding: 1rem;
+	color: var(--main-text-color);
+	transition: all ease 0.2s;
 }
