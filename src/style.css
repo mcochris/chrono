@@ -27,7 +27,7 @@ body {
 	transition: all ease 0.2s;
 }
 
-.page-header {
+header {
 	font-size: 2rem;
 	color: var(--main-text-color);
 	padding: 2rem 0;
