@@ -115,8 +115,8 @@ header {
 	border-radius: 2px;
 }
 
-.clocks-container,
-.clock-legend-container {
+#clocks-container,
+#clock-legend-container {
 	display: flex;
 	flex-direction: row;
 	gap: 14rem;
@@ -125,7 +125,7 @@ header {
 	flex-wrap: wrap;
 }
 
-.clock-legend-container {
+#clock-legend-container {
 	gap: 5.5rem;
 }
 
@@ -153,14 +153,14 @@ header {
 	letter-spacing: 0;
 }
 
-.clock-label.secondary-time {
+#secondary-time {
 	cursor: pointer;
 	border-radius: 8px;
 	padding: 0.25rem 0.5rem;
 	border: 1px solid transparent;
 }
 
-.clock-label.secondary-time:hover {
+#secondary-time:hover {
 	border: 1px solid var(--main-text-color);
 }
 
@@ -171,7 +171,7 @@ header {
 	transition: all ease 0.2s;
 }
 
-.tz-picker {
+#tz-picker {
 	border: 1px solid var(--main-text-color);
 	border-radius: 8px;
 	background-color: var(--main-bg-color);
@@ -180,7 +180,7 @@ header {
 	padding: 1rem;
 }
 
-.tz-picker[open] {
+#tz-picker[open] {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -188,24 +188,24 @@ header {
 	gap: 1rem;
 }
 
-.tz-picker::backdrop {
+#tz-picker::backdrop {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-.region-list-buttons,
-.country-list-buttons,
+#region-list-buttons,
+#country-list-buttons,
 .city-list-buttons,
-.tz-list-buttons {
+#tz-list-buttons {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
 	justify-content: center;
 }
 
-.region-list-header,
-.country-list-header,
+#region-list-header,
+#country-list-header,
 .city-list-header,
-.tz-list-header {
+#tz-list-header {
 	width: 100%;
 	text-align: center;
 }
@@ -220,7 +220,7 @@ header {
 	pointer-events: none;
 }
 
-.time-diff {
+#time-diff {
 	font-size: 1.25rem;
 	color: var(--main-text-color);
 	transition: all ease 0.2s;
