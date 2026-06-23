@@ -8,6 +8,10 @@ type TzRegion = keyof typeof tzCountries;
 const deg = 6;
 const primaryClockHeader = document.getElementById("primary-clock-header") as HTMLAnchorElement;
 const secondaryClockHeader = document.getElementById("secondary-clock-header") as HTMLAnchorElement;
+const primaryClockTime = document.getElementById("primary-clock-time") as HTMLDivElement;
+const primaryClockDate = document.getElementById("primary-clock-date") as HTMLDivElement;
+const secondaryClockTime = document.getElementById("secondary-clock-time") as HTMLDivElement;
+const secondaryClockDate = document.getElementById("secondary-clock-date") as HTMLDivElement;
 const localHour = document.querySelector("#primary-clock .hour") as HTMLDivElement;
 const localMin = document.querySelector("#primary-clock .min") as HTMLDivElement;
 const localSec = document.querySelector("#primary-clock .sec") as HTMLDivElement;
@@ -22,14 +26,9 @@ const countryListButtons = document.getElementById("country-list-buttons") as HT
 const tzList = document.getElementById("tz-list") as HTMLDivElement;
 const tzPicker = document.getElementById("tz-picker") as HTMLDialogElement;
 const tzListButtons = document.getElementById("tz-list-buttons") as HTMLDivElement;
-const primaryClockTZ = document.getElementById("primary-clock-tz") as HTMLSpanElement;
 const tzPickerExitButton = document.getElementById("tz-picker-exit-button") as HTMLButtonElement;
 const tzPickerDoneButton = document.getElementById("tz-picker-done-button") as HTMLButtonElement;
-const primaryDateLegend = document.getElementById("primary-date-legend") as HTMLDivElement;
-const secondaryDateLegend = document.getElementById("secondary-date-legend") as HTMLDivElement;
 const timeDiffDiv = document.getElementById("time-diff") as HTMLDivElement;
-const primaryTimeLegend = document.getElementById("primary-time-legend") as HTMLDivElement;
-const secondaryTimeLegend = document.getElementById("secondary-time-legend") as HTMLDivElement;
 const countryListHeader = document.getElementById("country-list-header") as HTMLDivElement;
 const themeToggle = document.getElementById("theme-toggle") as HTMLButtonElement;
 
@@ -51,11 +50,11 @@ initTheme(themeToggle);
 function setClock() {
 	primaryTZ = DateTime.now().zoneName;
 	primaryClockHeader.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
-	primaryTimeLegend.textContent = DateTime.now().toFormat("hh:mm:ss a");
-	primaryDateLegend.textContent = DateTime.now().toFormat("DDDD");
-	secondaryTZ = secondaryTZ || "UTC";
-	secondaryTimeLegend.textContent = DateTime.now().setZone(secondaryTZ).toFormat("hh:mm:ss a");
-	secondaryDateLegend.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
+	primaryClockTime.textContent = DateTime.now().toFormat("hh:mm:ss a");
+	primaryClockDate.textContent = DateTime.now().toFormat("DDDD");
+	secondaryClockHeader.textContent = secondaryTZ || "UTC";
+	secondaryClockTime.textContent = DateTime.now().setZone(secondaryTZ).toFormat("hh:mm:ss a");
+	secondaryClockDate.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
 
 	const lhh = DateTime.now().hour * 30;
 	const lmm = DateTime.now().minute * deg;

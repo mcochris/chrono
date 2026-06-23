@@ -113,3 +113,12 @@
 	align-self: flex-end;
 	width: 24rem;
 }
+
+#primary-clock-time,
+#secondary-clock-time,
+#primary-clock-date,
+#secondary-clock-date,
+#time-diff-div {
+	color: var(--main-text-color);
+	transition: all ease 0.2s;
+}
