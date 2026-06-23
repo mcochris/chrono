@@ -1,5 +1,3 @@
-// This code is partially adapted from https://codepen.io/imvpn22/pen/RwPvOgQ
-
 import { DateTime, IANAZone } from 'luxon';
 import tzCountries from './assets/tz-countries.json';
 import timezones from './assets/tz-zones.json';
@@ -85,7 +83,8 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (ev
 //=============================================================================
 // Updates the rotation of the clock hands based on the current time in the
 // local timezone and the selected secondary timezone. Also updates the
-// timezone label for the primary clock.
+// timezone label for the primary clock. This code is partially adapted from
+// https://codepen.io/imvpn22/pen/RwPvOgQ
 //=============================================================================
 function setClock() {
 	primaryTZ = DateTime.now().zoneName;

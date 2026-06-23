@@ -95,93 +95,12 @@
 	border-radius: 2px;
 }
 
-/* #clock-legend-container {
-	gap: 5.5rem;
-} */
-
 .clock-section {
-	/* .clock-legend { */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 1rem;
 }
-
-/* .clock-label,
-.clock-legend {
-	#tz-picker {
-		border: 1px solid var(--main-text-color);
-		border-radius: 8px;
-		background-color: var(--main-bg-color);
-		color: var(--main-text-color);
-		width: 80%;
-		padding: 1rem;
-	}
-
-	#tz-picker[open] {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	#tz-picker::backdrop {
-		background-color: rgba(0, 0, 0, 0.5);
-	}
-
-	#region-list-buttons,
-	#country-list-buttons,
-	.city-list-buttons,
-	#tz-list-buttons {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		justify-content: center;
-	}
-
-	#region-list-header,
-	#country-list-header,
-	.city-list-header,
-	#tz-list-header {
-		width: 100%;
-		text-align: center;
-	}
-
-	.active-button {
-		background-color: var(--main-text-color);
-		color: var(--main-bg-color);
-	}
-
-	.disabled-button {
-		opacity: 0.5;
-		pointer-events: none;
-	}
-
-	font-size: 1rem;
-	color: var(--main-text-color);
-	text-transform: uppercase;
-	letter-spacing: 3px;
-	transition: all ease 0.2s;
-}
-
-.clock-legend {
-	padding-top: 2rem;
-	font-size: 1.25rem;
-	text-transform: none;
-	letter-spacing: 0;
-}
-
-#secondary-time {
-	cursor: pointer;
-	border-radius: 8px;
-	padding: 0.25rem 0.5rem;
-	border: 1px solid transparent;
-}
-
-#secondary-time:hover {
-	border: 1px solid var(--main-text-color);
-} */
 
 .date {
 	padding-top: 2rem;
@@ -190,7 +109,7 @@
 	transition: all ease 0.2s;
 }
 
-#time-diff {
+#time-diff-div {
 	align-self: flex-end;
 	width: 24rem;
 }
