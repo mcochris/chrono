@@ -7,6 +7,8 @@ import timezones from './assets/tz-zones.json';
 type TzRegion = keyof typeof tzCountries;
 
 const deg = 6;
+const primaryClockHeader = document.getElementById("primary-clock-header") as HTMLAnchorElement;
+const secondaryClockHeader = document.getElementById("secondary-clock-header") as HTMLAnchorElement;
 const localHour = document.querySelector("#primary-clock .hour") as HTMLDivElement;
 const localMin = document.querySelector("#primary-clock .min") as HTMLDivElement;
 const localSec = document.querySelector("#primary-clock .sec") as HTMLDivElement;
@@ -87,7 +89,7 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (ev
 //=============================================================================
 function setClock() {
 	primaryTZ = DateTime.now().zoneName;
-	primaryClockTZ.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
+	primaryClockHeader.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
 	primaryTimeLegend.textContent = DateTime.now().toFormat("hh:mm:ss a");
 	primaryDateLegend.textContent = DateTime.now().toFormat("DDDD");
 	secondaryTZ = secondaryTZ || "UTC";

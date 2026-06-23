@@ -1,0 +1,48 @@
+#tz-picker {
+    border: 1px solid var(--main-text-color);
+    border-radius: 8px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    width: 80%;
+    padding: 1rem;
+}
+
+#tz-picker[open] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+#tz-picker::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#region-list-buttons,
+#country-list-buttons,
+.city-list-buttons,
+#tz-list-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+#region-list-header,
+#country-list-header,
+.city-list-header,
+#tz-list-header {
+    width: 100%;
+    text-align: center;
+}
+
+.active-button {
+    background-color: var(--main-text-color);
+    color: var(--main-bg-color);
+}
+
+.disabled-button {
+    opacity: 0.5;
+    pointer-events: none;
+}

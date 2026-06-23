@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="icon" href="/src/assets/favicon.ico" sizes="32x32">
-	<link rel="icon" type="image/png" href="/src/assets/puffy.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/src/assets/puffy.png">
 	<link rel="apple-touch-icon" href="/src/assets/apple-touch-icon.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Chrono</title>
@@ -14,7 +14,8 @@
 
 <body>
 	<button type="button" id="theme-toggle" aria-label="Toggle color theme" title="Toggle color theme">
-		<svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		<svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+			stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 			<circle cx="12" cy="12" r="5"></circle>
 			<line x1="12" y1="1" x2="12" y2="3"></line>
 			<line x1="12" y1="21" x2="12" y2="23"></line>
@@ -25,7 +26,8 @@
 			<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
 			<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
 		</svg>
-		<svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		<svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+			stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 			<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
 		</svg>
 	</button>
@@ -34,25 +36,34 @@
 
 	<div id="clocks-container">
 		<div class="clock-section" id="primary-clock">
-			<div class="clock-label"><span id="primary-clock-tz"></span></div>
+			<a id="primary-clock-header" href="#">Primary clock</a>
 			<div class="clock">
 				<div class="hour"></div>
 				<div class="min"></div>
 				<div class="sec"></div>
 			</div>
+			<div>Primary clock footer</div>
+			<div>Primary clock footer 2</div>
+		</div>
+
+		<div class="clock-section" id="time-diff">
+			<div>Time difference</div>
+			<div>4 hours 30 minutes</div>
 		</div>
 
 		<div class="clock-section" id="secondary-clock">
-			<button type="button" class="clock-label" id="secondary-time">UTC</button>
+			<a id="secondary-clock-header" href="#">Secondary clock</a>
 			<div class="clock">
 				<div class="hour"></div>
 				<div class="min"></div>
 				<div class="sec"></div>
 			</div>
+			<div>Secondary clock footer</div>
+			<div>Secondary clock footer 2</div>
 		</div>
 	</div>
 
-	<div id="clock-legend-container">
+	<!-- <div id="clock-legend-container">
 		<div class="clock-legend">
 			<div id="primary-time-legend">Primary time</div>
 			<div id="primary-date-legend">Primary date</div>
@@ -65,7 +76,7 @@
 			<div id="secondary-time-legend">Secondary time</div>
 			<div id="secondary-date-legend">Secondary date</div>
 		</div>
-	</div>
+	</div> -->
 
 	<dialog id="tz-picker">
 		<div>

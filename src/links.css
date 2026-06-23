@@ -1,0 +1,10 @@
+a,
+a:visited {
+	color: #96937d;
+}
+
+a:hover,
+a:focus {
+	font-weight: bold;
+	background: var(--main-bg-color);
+}
