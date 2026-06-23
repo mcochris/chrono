@@ -6,11 +6,15 @@
 :root {
 	--main-bg-color: whitesmoke;
 	--main-text-color: gray;
+	--clock-hand-color: gray;
+	--link-color: black;
 }
 
 [data-theme="dark"] {
 	--main-bg-color: #292a2e;
-	--main-text-color: whitesmoke;
+	--main-text-color: tan;
+	--clock-hand-color: whitesmoke;
+	--link-color: whitesmoke;
 }
 
 * {
