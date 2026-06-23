@@ -13,7 +13,8 @@
     "@types/node": "^26.0.0",
     "typescript": "~6.0.2",
     "vite": "^8.0.12",
-    "vite-plugin-compression2": "^2.5.3"
+    "vite-plugin-compression2": "^2.5.3",
+    "vite-plugin-singlefile": "^2.3.3"
   },
   "dependencies": {
     "luxon": "^3.7.2"
