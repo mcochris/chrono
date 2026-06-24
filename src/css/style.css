@@ -1,8 +1,3 @@
-@import url(links.css);
-@import url(clock.css);
-@import url(tz-picker.css);
-@import url(theme-toggle.css);
-
 :root {
 	--main-bg-color: whitesmoke;
 	--main-text-color: gray;
