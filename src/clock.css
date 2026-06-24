@@ -91,7 +91,7 @@
 	content: "";
 	height: 60%;
 	width: 2px;
-	background-color: red;
+	background-color: var(--sweep-hand-color);
 	border-radius: 2px;
 }
 

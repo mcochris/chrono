@@ -8,6 +8,7 @@
 	--main-text-color: gray;
 	--clock-hand-color: gray;
 	--link-color: black;
+	--sweep-hand-color: red;
 }
 
 [data-theme="dark"] {
@@ -15,6 +16,7 @@
 	--main-text-color: tan;
 	--clock-hand-color: whitesmoke;
 	--link-color: whitesmoke;
+	--sweep-hand-color: red;
 }
 
 * {

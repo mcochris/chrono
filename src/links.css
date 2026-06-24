@@ -1,10 +1,22 @@
-a,
+/* Base style for all links */
+a {
+	color: var(--link-color);
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* Unvisited links */
+a:link {
+	color: var(--link-color);
+}
+
+/* Visited links */
 a:visited {
 	color: var(--link-color);
 }
 
-a:hover,
-a:focus {
+/* Active (clicked) links */
+a:active {
 	font-weight: bold;
-	background: var(--main-bg-color);
+	color: var(--link-color);
 }
