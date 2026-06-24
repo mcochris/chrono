@@ -1,9 +1,6 @@
-import { DateTime, IANAZone } from 'luxon';
-import tzCountries from './assets/tz-countries.json';
-import timezones from './assets/tz-zones.json';
+import { DateTime } from 'luxon';
 import { initTheme } from './theme';
-
-type TzRegion = keyof typeof tzCountries;
+import { clearTZPicker, initTZPicker, secondaryTZ } from './setTZ';
 
 const deg = 6;
 const primaryClockHeader = document.getElementById("primary-clock-header") as HTMLAnchorElement;
@@ -18,28 +15,20 @@ const localSec = document.querySelector("#primary-clock .sec") as HTMLDivElement
 const secondaryHour = document.querySelector("#secondary-clock .hour") as HTMLDivElement;
 const secondaryMin = document.querySelector("#secondary-clock .min") as HTMLDivElement;
 const secondarySec = document.querySelector("#secondary-clock .sec") as HTMLDivElement;
-const TZselector = document.getElementById("secondary-time") as HTMLDivElement;
-const TZRegionButtons = document.querySelectorAll("#region-list-buttons button") as NodeListOf<HTMLButtonElement>;
-const regionListButtons = document.getElementById("region-list-buttons") as HTMLDivElement;
-const countryList = document.getElementById("country-list") as HTMLDivElement;
-const countryListButtons = document.getElementById("country-list-buttons") as HTMLDivElement;
-const tzList = document.getElementById("tz-list") as HTMLDivElement;
-const tzPicker = document.getElementById("tz-picker") as HTMLDialogElement;
-const tzListButtons = document.getElementById("tz-list-buttons") as HTMLDivElement;
-const tzPickerExitButton = document.getElementById("tz-picker-exit-button") as HTMLButtonElement;
-const tzPickerDoneButton = document.getElementById("tz-picker-done-button") as HTMLButtonElement;
-const timeDiffDiv = document.getElementById("time-diff") as HTMLDivElement;
-const countryListHeader = document.getElementById("country-list-header") as HTMLDivElement;
+const timeDiff = document.getElementById("time-diff") as HTMLDivElement;
 const themeToggle = document.getElementById("theme-toggle") as HTMLButtonElement;
 
 var primaryTZ: string = DateTime.now().zoneName;
-var secondaryTZ: string = "UTC";
 
 clearTZPicker();
 setClock();
 setInterval(setClock, 1000);
 setTZDiff(primaryTZ, secondaryTZ || "UTC");
 initTheme(themeToggle);
+initTZPicker(() => {
+	setTZDiff(primaryTZ, secondaryTZ || "UTC");
+	setClock();
+});
 
 //=============================================================================
 // Updates the rotation of the clock hands based on the current time in the
@@ -72,182 +61,6 @@ function setClock() {
 };
 
 //=============================================================================
-// Resets the timezone picker to its initial state by hiding the country and
-// timezone lists, clearing the buttons, and removing the active button styles.
-//=============================================================================
-function clearTZPicker() {
-	countryList.style.display = "none";
-	tzList.style.display = "none";
-	countryListButtons.innerHTML = "";
-	tzListButtons.innerHTML = "";
-	TZRegionButtons.forEach(btn => btn.classList.remove("active-button"));
-	countryListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
-	tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
-	tzPickerDoneButton.classList.add("disabled-button");
-}
-
-//=============================================================================
-// Add click event listener to the timezone selector div. Toggles the
-// visibility of the timezone picker div.
-//=============================================================================
-TZselector.addEventListener("click", () => {
-	tzPicker.open ? tzPicker.close() : tzPicker.showModal();
-	clearTZPicker();
-});
-
-tzPicker.addEventListener("cancel", () => {
-	clearTZPicker();
-});
-
-//=============================================================================
-// Add click event listeners to the region buttons
-//=============================================================================
-TZRegionButtons.forEach(button => {
-	button.addEventListener("click", () => {
-		TZRegionButtons.forEach(btn => btn.classList.remove("active-button"));
-		button.classList.add("active-button");
-		countryListButtons.innerHTML = "";
-		tzListButtons.innerHTML = "";
-		countryList.style.display = "none";
-		tzList.style.display = "none";
-		const region = button.getAttribute("data-region");
-		if (region) {
-			if (region === "UTC") {
-				tzPickerDoneButton.classList.remove("disabled-button");
-				countryListHeader.textContent = "UTC is a single timezone with no country associations.";
-			} else {
-				countryListHeader.textContent = "Select country:";
-			}
-			const countries = getCountriesByRegion(region);
-			countryListButtons.innerHTML = "";
-			countries.forEach(country => {
-				const btn = document.createElement("button");
-				btn.type = "button";
-				btn.setAttribute("data-country", country);
-				btn.textContent = country;
-				countryListButtons.appendChild(btn);
-			});
-			countryList.style.display = "";
-		}
-	});
-});
-
-//=============================================================================
-// Add click event listener to the country list
-//=============================================================================
-countryList.addEventListener("click", (event) => {
-	tzListButtons.innerHTML = "";
-	tzList.style.display = "none";
-	const target = event.target as HTMLElement;
-	if (target.tagName === "BUTTON") {
-		const country = target.getAttribute("data-country");
-		countryListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
-		target.classList.add("active-button");
-		if (country) {
-			const region = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") || "";
-			const timezones = getTZByCountryAndRegion(country, region);
-			if (timezones.length > 0) {
-				tzListButtons.innerHTML = "";
-				timezones.forEach(tz => {
-					const btn = document.createElement("button");
-					btn.type = "button";
-					btn.setAttribute("data-tz", tz);
-					btn.textContent = tz.split('/').pop()!.replace(/_/g, ' ');
-					tzListButtons.appendChild(btn);
-				});
-				tzList.style.display = "";
-			}
-		}
-	}
-});
-
-//=============================================================================
-// Add click event listener to the timezone list
-//=============================================================================
-tzList.addEventListener("click", (event) => {
-	const target = event.target as HTMLElement;
-	if (target.tagName === "BUTTON") {
-		const tz = target.getAttribute("data-tz");
-		tzListButtons.querySelectorAll("button").forEach(btn => btn.classList.remove("active-button"));
-		target.classList.add("active-button");
-		if (tz) {
-			tzPickerDoneButton.classList.remove("disabled-button");
-		}
-	}
-});
-
-//=============================================================================
-// Returns a sorted, unique list of timezones in the given IANA country.
-//=============================================================================
-function getTZByCountry(country: string): string[] {
-	return Object.prototype.hasOwnProperty.call(timezones, country)
-		? (timezones as Record<string, string[]>)[country]
-		: [];
-}
-
-//=============================================================================
-// Returns timezones for a country filtered to only those valid under the given
-// IANA region prefix (e.g. "Pacific" + "Honolulu" → "Pacific/Honolulu").
-//=============================================================================
-function getTZByCountryAndRegion(country: string, region: string): string[] {
-	return getTZByCountry(country).filter(tz =>
-		IANAZone.isValidZone(region + '/' + tz.replace(/ /g, '_'))
-	);
-}
-
-//=============================================================================
-// Returns a sorted, unique list of countries in the given IANA region.
-//=============================================================================
-function getCountriesByRegion(region: string): string[] {
-	const key = region as TzRegion;
-	return Object.prototype.hasOwnProperty.call(tzCountries, key)
-		? [...tzCountries[key]].sort()
-		: [];
-}
-
-//=============================================================================
-// Add click event listener to the exit button. Resets the timezone picker to
-// its initial state and hides the TZ picker div.
-//=============================================================================
-tzPickerExitButton.addEventListener("click", () => {
-	tzPicker.close();
-	clearTZPicker();
-});
-
-//=============================================================================
-// Click handler for "Done" button in TZ selector. Selects the specified TZ, 
-// updates the display, and closes the TZ picker.
-//=============================================================================
-tzPickerDoneButton.addEventListener("click", () => {
-	const activeTZButton = tzListButtons.querySelector("button.active-button");
-	if (activeTZButton) {
-		const tz = activeTZButton.getAttribute("data-tz");
-		if (tz) {
-			let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
-			const cityName = tz.split('/').pop()!.replace(/ /g, '_');
-			TZselector.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
-			secondaryTZ = ianaTZ || tz;
-			tzPicker.close();
-			clearTZPicker();
-		}
-	} else {
-		TZselector.textContent = "UTC";
-		secondaryTZ = "UTC";
-		tzPicker.close();
-		clearTZPicker();
-	}
-});
-
-//=============================================================================
-// Once the TZ picker is closed, update the time difference and refresh the
-// clocks.
-//=============================================================================
-tzPicker.addEventListener("close", () => {
-	setTZDiff(primaryTZ, secondaryTZ || "UTC");
-	setClock();
-});
-
-//=============================================================================
 // Calculates the time difference between two timezones and updates the display
 //=============================================================================
 function setTZDiff(tz1: string, tz2: string) {
@@ -255,13 +68,13 @@ function setTZDiff(tz1: string, tz2: string) {
 	const hours = Math.trunc(offsetDiffMinutes / 60);
 	const minutes = Math.abs(offsetDiffMinutes % 60);
 	if (hours === 0 && minutes === 0) {
-		timeDiffDiv.innerHTML = "No time difference";
+		timeDiff.innerHTML = "No time difference";
 		return;
 	}
 
 	if (minutes === 0) {
-		timeDiffDiv.innerHTML = String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s");
+		timeDiff.innerHTML = String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s");
 	} else {
-		timeDiffDiv.innerHTML = String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s") + " " + String(minutes) + " minutes";
+		timeDiff.innerHTML = String(Math.abs(hours)) + " hour" + (Math.abs(hours) === 1 ? "" : "s") + " " + String(minutes) + " minutes";
 	}
 }
