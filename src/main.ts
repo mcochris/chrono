@@ -9,9 +9,9 @@ const primaryClockTime = document.getElementById("primary-clock-time") as HTMLDi
 const primaryClockDate = document.getElementById("primary-clock-date") as HTMLDivElement;
 const secondaryClockTime = document.getElementById("secondary-clock-time") as HTMLDivElement;
 const secondaryClockDate = document.getElementById("secondary-clock-date") as HTMLDivElement;
-const localHour = document.querySelector("#primary-clock .hour") as HTMLDivElement;
-const localMin = document.querySelector("#primary-clock .min") as HTMLDivElement;
-const localSec = document.querySelector("#primary-clock .sec") as HTMLDivElement;
+const primaryHour = document.querySelector("#primary-clock .hour") as HTMLDivElement;
+const primaryMin = document.querySelector("#primary-clock .min") as HTMLDivElement;
+const primarySec = document.querySelector("#primary-clock .sec") as HTMLDivElement;
 const secondaryHour = document.querySelector("#secondary-clock .hour") as HTMLDivElement;
 const secondaryMin = document.querySelector("#secondary-clock .min") as HTMLDivElement;
 const secondarySec = document.querySelector("#secondary-clock .sec") as HTMLDivElement;
@@ -48,9 +48,9 @@ function setClock() {
 	const lhh = DateTime.now().hour * 30;
 	const lmm = DateTime.now().minute * deg;
 	const lss = DateTime.now().second * deg;
-	localHour.style.transform = `rotateZ(${lhh + lmm / 12}deg)`;
-	localMin.style.transform = `rotateZ(${lmm}deg)`;
-	localSec.style.transform = `rotateZ(${lss}deg)`;
+	primaryHour.style.transform = `rotateZ(${lhh + lmm / 12}deg)`;
+	primaryMin.style.transform = `rotateZ(${lmm}deg)`;
+	primarySec.style.transform = `rotateZ(${lss}deg)`;
 
 	const uhh = DateTime.now().setZone(secondaryTZ).hour * 30;
 	const umm = DateTime.now().setZone(secondaryTZ).minute * deg;
