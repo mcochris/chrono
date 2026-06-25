@@ -41,7 +41,10 @@ function setClock() {
 	primaryClockHeader.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
 	primaryClockTime.textContent = DateTime.now().toFormat("hh:mm:ss a");
 	primaryClockDate.textContent = DateTime.now().toFormat("DDDD");
-	secondaryClockHeader.textContent = secondaryTZ;
+	if (secondaryTZ === "UTC")
+		secondaryClockHeader.textContent = secondaryTZ;
+	else
+		secondaryClockHeader.textContent = secondaryTZ + " (" + DateTime.now().setZone(secondaryTZ).toFormat("ZZZZ") + ")";
 	secondaryClockTime.textContent = DateTime.now().setZone(secondaryTZ).toFormat("hh:mm:ss a");
 	secondaryClockDate.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
 

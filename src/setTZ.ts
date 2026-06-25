@@ -178,8 +178,9 @@ export function initTZPicker(onApply: () => void) {
 			const tz = activeTZButton.getAttribute("data-tz");
 			if (tz) {
 				let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
-				const cityName = tz.split('/').pop()!.replace(/ /g, '_');
-				secondaryClockHeader.textContent = cityName + " (" + DateTime.now().setZone(ianaTZ).toFormat("ZZZZ") + ")";
+				const TZname = tz.split('/').pop()!.replace(/ /g, '_');
+				const TZcode = DateTime.now().setZone(ianaTZ).toFormat("ZZZZ");
+				secondaryClockHeader.textContent = `${TZname} (${TZcode})`;
 				secondaryTZ = ianaTZ || tz;
 				tzPicker.close();
 				clearTZPicker();
