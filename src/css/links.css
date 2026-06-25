@@ -1,18 +1,18 @@
 /* Base style for all links */
 a {
-	color: var(--link-color);
+	color: var(--main-text-color);
 	text-decoration: underline;
 	cursor: pointer;
 }
 
 /* Unvisited links */
 a:link {
-	color: var(--link-color);
+	color: var(--main-text-color);
 }
 
 /* Visited links */
 a:visited {
-	color: var(--link-color);
+	color: var(--main-text-color);
 }
 
 /* Active (clicked) links */

@@ -23,10 +23,10 @@ var primaryTZ: string = DateTime.now().zoneName;
 clearTZPicker();
 setClock();
 setInterval(setClock, 1000);
-setTZDiff(primaryTZ, secondaryTZ || "UTC");
+setTZDiff(primaryTZ, secondaryTZ);
 initTheme(themeToggle);
 initTZPicker(() => {
-	setTZDiff(primaryTZ, secondaryTZ || "UTC");
+	setTZDiff(primaryTZ, secondaryTZ);
 	setClock();
 });
 
@@ -41,7 +41,7 @@ function setClock() {
 	primaryClockHeader.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
 	primaryClockTime.textContent = DateTime.now().toFormat("hh:mm:ss a");
 	primaryClockDate.textContent = DateTime.now().toFormat("DDDD");
-	secondaryClockHeader.textContent = secondaryTZ || "UTC";
+	secondaryClockHeader.textContent = secondaryTZ;
 	secondaryClockTime.textContent = DateTime.now().setZone(secondaryTZ).toFormat("hh:mm:ss a");
 	secondaryClockDate.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
 
