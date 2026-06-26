@@ -98,6 +98,9 @@ export function initTZPicker(onApply: () => void) {
 				if (region === "UTC") {
 					tzPickerDoneButton.classList.remove("disabled-button");
 					countryListHeader.textContent = "UTC is a single timezone with no country associations.";
+				} else if (region === "Local") {
+					tzPickerDoneButton.classList.remove("disabled-button");
+					countryListHeader.textContent = "Local time is time zone your computer us set to.";
 				} else {
 					countryListHeader.textContent = "Select country:";
 				}
@@ -186,8 +189,21 @@ export function initTZPicker(onApply: () => void) {
 				clearTZPicker();
 			}
 		} else {
-			secondaryClockHeader.textContent = "UTC";
-			secondaryTZ = "UTC";
+			for (var i = 0; i < TZRegionButtons.length; i++) {
+				if (TZRegionButtons[i].classList.contains("active-button")) {
+					const customRegion = TZRegionButtons[i].getAttribute("data-region");
+					switch (customRegion) {
+						case "UTC":
+							secondaryClockHeader.textContent = "UTC";
+							secondaryTZ = "UTC";
+							break;
+						case "Local":
+							secondaryClockHeader.textContent = DateTime.now().toFormat("ZZZZ");
+							secondaryTZ = DateTime.now().zoneName;
+							break;
+					}
+				}
+			}
 			tzPicker.close();
 			clearTZPicker();
 		}

@@ -4,7 +4,7 @@
 	--clock-hand-color: gray;
 	--link-color: black;
 	--sweep-hand-color: red;
-	--active-button-bg-color: var(--main-text-color);
+	--active-button-bg-color: gray;
 }
 
 [data-theme="dark"] {
