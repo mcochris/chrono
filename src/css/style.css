@@ -4,14 +4,16 @@
 	--clock-hand-color: gray;
 	--link-color: black;
 	--sweep-hand-color: red;
+	--active-button-bg-color: var(--main-text-color);
 }
 
 [data-theme="dark"] {
 	--main-bg-color: #292a2e;
-	--main-text-color: saddlebrown;
+	--main-text-color: whitesmoke;
 	--clock-hand-color: whitesmoke;
-	--link-color: whitesmoke;
+	--link-color: white;
 	--sweep-hand-color: red;
+	--active-button-bg-color: gray;
 }
 
 * {

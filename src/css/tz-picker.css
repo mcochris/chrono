@@ -36,7 +36,7 @@
 }
 
 .active-button {
-    background-color: var(--main-text-color);
+    background-color: var(--active-button-bg-color);
     color: var(--main-bg-color);
 }
 
