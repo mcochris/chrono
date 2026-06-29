@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { initTheme } from './theme';
-import { clearTZPicker, initTZPicker, secondaryTZ } from './setTZ';
+import { clearTZPicker, initTZPicker, primaryTZ, secondaryTZ } from './setTZ';
 
 const deg = 6;
 const primaryClockHeader = document.getElementById("primary-clock-header") as HTMLAnchorElement;
@@ -17,8 +17,6 @@ const secondaryMin = document.querySelector("#secondary-clock .min") as HTMLDivE
 const secondarySec = document.querySelector("#secondary-clock .sec") as HTMLDivElement;
 const timeDiff = document.getElementById("time-diff") as HTMLDivElement;
 const themeToggle = document.getElementById("theme-toggle") as HTMLButtonElement;
-
-var primaryTZ: string = DateTime.now().zoneName;
 
 clearTZPicker();
 setClock();
@@ -37,10 +35,13 @@ initTZPicker(() => {
 // https://codepen.io/imvpn22/pen/RwPvOgQ
 //=============================================================================
 function setClock() {
-	primaryTZ = DateTime.now().zoneName;
-	primaryClockHeader.textContent = primaryTZ + " (" + DateTime.now().toFormat("ZZZZ") + ")";
-	primaryClockTime.textContent = DateTime.now().toFormat("hh:mm:ss a");
-	primaryClockDate.textContent = DateTime.now().toFormat("DDDD");
+	if (primaryTZ === "UTC")
+		primaryClockHeader.textContent = primaryTZ;
+	else
+		primaryClockHeader.textContent = primaryTZ + " (" + DateTime.now().setZone(primaryTZ).toFormat("ZZZZ") + ")";
+	primaryClockTime.textContent = DateTime.now().setZone(primaryTZ).toFormat("hh:mm:ss a");
+	primaryClockDate.textContent = DateTime.now().setZone(primaryTZ).toFormat("DDDD");
+
 	if (secondaryTZ === "UTC")
 		secondaryClockHeader.textContent = secondaryTZ;
 	else
@@ -48,9 +49,9 @@ function setClock() {
 	secondaryClockTime.textContent = DateTime.now().setZone(secondaryTZ).toFormat("hh:mm:ss a");
 	secondaryClockDate.textContent = DateTime.now().setZone(secondaryTZ).toFormat("DDDD");
 
-	const lhh = DateTime.now().hour * 30;
-	const lmm = DateTime.now().minute * deg;
-	const lss = DateTime.now().second * deg;
+	const lhh = DateTime.now().setZone(primaryTZ).hour * 30;
+	const lmm = DateTime.now().setZone(primaryTZ).minute * deg;
+	const lss = DateTime.now().setZone(primaryTZ).second * deg;
 	primaryHour.style.transform = `rotateZ(${lhh + lmm / 12}deg)`;
 	primaryMin.style.transform = `rotateZ(${lmm}deg)`;
 	primarySec.style.transform = `rotateZ(${lss}deg)`;

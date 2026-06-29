@@ -3,7 +3,9 @@ import tzCountries from './assets/tz-countries.json';
 import timezones from './assets/tz-zones.json';
 
 type TzRegion = keyof typeof tzCountries;
+type ClockTarget = "primary" | "secondary";
 
+const primaryClockHeader = document.getElementById("primary-clock-header") as HTMLAnchorElement;
 const secondaryClockHeader = document.getElementById("secondary-clock-header") as HTMLAnchorElement;
 const TZRegionButtons = document.querySelectorAll("#region-list-buttons button") as NodeListOf<HTMLButtonElement>;
 const regionListButtons = document.getElementById("region-list-buttons") as HTMLDivElement;
@@ -16,7 +18,12 @@ const tzPicker = document.getElementById("tz-picker") as HTMLDialogElement;
 const tzPickerExitButton = document.getElementById("tz-picker-exit-button") as HTMLButtonElement;
 const tzPickerDoneButton = document.getElementById("tz-picker-done-button") as HTMLButtonElement;
 
+export let primaryTZ: string = DateTime.now().zoneName;
 export let secondaryTZ: string = "UTC";
+
+// Tracks which clock's header was clicked to open the picker, so the Done
+// button knows whether to update primaryTZ or secondaryTZ.
+let activeTarget: ClockTarget = "secondary";
 
 //=============================================================================
 // Resets the timezone picker to its initial state by hiding the country and
@@ -70,13 +77,18 @@ export function getCountriesByRegion(region: string): string[] {
 //=============================================================================
 export function initTZPicker(onApply: () => void) {
 	//=============================================================================
-	// Add click event listener to the timezone selector div. Toggles the
-	// visibility of the timezone picker div.
+	// Add click event listeners to the timezone selector headers. Toggles the
+	// visibility of the timezone picker dialog and records which clock's
+	// timezone is being changed.
 	//=============================================================================
-	secondaryClockHeader.addEventListener("click", () => {
+	function openPicker(target: ClockTarget) {
+		activeTarget = target;
 		tzPicker.open ? tzPicker.close() : tzPicker.showModal();
 		clearTZPicker();
-	});
+	}
+
+	primaryClockHeader.addEventListener("click", () => openPicker("primary"));
+	secondaryClockHeader.addEventListener("click", () => openPicker("secondary"));
 
 	tzPicker.addEventListener("cancel", () => {
 		clearTZPicker();
@@ -176,6 +188,7 @@ export function initTZPicker(onApply: () => void) {
 	// updates the display, and closes the TZ picker.
 	//=============================================================================
 	tzPickerDoneButton.addEventListener("click", () => {
+		const header = activeTarget === "primary" ? primaryClockHeader : secondaryClockHeader;
 		const activeTZButton = tzListButtons.querySelector("button.active-button");
 		if (activeTZButton) {
 			const tz = activeTZButton.getAttribute("data-tz");
@@ -183,8 +196,12 @@ export function initTZPicker(onApply: () => void) {
 				let ianaTZ = regionListButtons.querySelector("button.active-button")?.getAttribute("data-region") + "/" + tz.replace(/ /g, '_');
 				const TZname = tz.split('/').pop()!.replace(/ /g, '_');
 				const TZcode = DateTime.now().setZone(ianaTZ).toFormat("ZZZZ");
-				secondaryClockHeader.textContent = `${TZname} (${TZcode})`;
-				secondaryTZ = ianaTZ || tz;
+				header.textContent = `${TZname} (${TZcode})`;
+				if (activeTarget === "primary") {
+					primaryTZ = ianaTZ || tz;
+				} else {
+					secondaryTZ = ianaTZ || tz;
+				}
 				tzPicker.close();
 				clearTZPicker();
 			}
@@ -194,12 +211,20 @@ export function initTZPicker(onApply: () => void) {
 					const customRegion = TZRegionButtons[i].getAttribute("data-region");
 					switch (customRegion) {
 						case "UTC":
-							secondaryClockHeader.textContent = "UTC";
-							secondaryTZ = "UTC";
+							header.textContent = "UTC";
+							if (activeTarget === "primary") {
+								primaryTZ = "UTC";
+							} else {
+								secondaryTZ = "UTC";
+							}
 							break;
 						case "Local":
-							secondaryClockHeader.textContent = DateTime.now().toFormat("ZZZZ");
-							secondaryTZ = DateTime.now().zoneName;
+							header.textContent = DateTime.now().toFormat("ZZZZ");
+							if (activeTarget === "primary") {
+								primaryTZ = DateTime.now().zoneName;
+							} else {
+								secondaryTZ = DateTime.now().zoneName;
+							}
 							break;
 					}
 				}
